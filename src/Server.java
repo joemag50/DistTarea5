@@ -29,7 +29,6 @@ public class Server extends MainWindow implements Runnable
 
 	Server ()
 	{
-		System.out.println(this.puerto + "");
 		labels = new ArrayList<MyLabel>();
 		MyLabel l_titulo = new MyLabel("CPU | RAM | SO | Version SO | Ancho de banda | IP");
 		l_m1 = new MyLabel("-");
@@ -74,15 +73,11 @@ public class Server extends MainWindow implements Runnable
             ObjectOutputStream oos = null;
 
             Socket s = null;
-            System.out.println("Puerto recibir server # " + this.puerto);
             ServerSocket ss = new ServerSocket(this.puerto);
-            System.out.println("Truena 1");
             while (this.run_me)
             {
-                System.out.println("Truena 2");
                 try
                 {
-                    System.out.println("Entra");
                     // el ServerSocket me da el Socket
                     s = ss.accept();
                     // informacion en la consola
@@ -98,21 +93,17 @@ public class Server extends MainWindow implements Runnable
                         this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
                         this.orderClients();
                         this.setLabelsText(this.clients);
-                        System.out.println(this.labels);
                         //server.labels.get(server.pc).setText(
                         //	String.format("%s %s %s %s", respuesta[0], respuesta[1], respuesta[2], respuesta[3])
                         //);
                         this.pc++;
-                        System.out.println(this.pc);
                     }
                     else if(!this.clients.get(0).ip.equals(this.oClient.ip)) {
-                        System.out.println("Aber tus pies");
                         if( oos !=null ) oos.close();
                         if( ois !=null ) ois.close();
                         if( s != null ) s.close();
                         sendIPs(this.clients.get(0).ip);
                         this.run_me = false;
-                        System.out.println("Truena 3");
                         break;
                     }
                     //System.out.println(nom);
@@ -124,7 +115,6 @@ public class Server extends MainWindow implements Runnable
                     if( oos !=null ) oos.close();
                     if( ois !=null ) ois.close();
                     if( s != null ) s.close();
-                    System.out.println("Conexion cerrada!");
                 }
             }
             
@@ -132,7 +122,6 @@ public class Server extends MainWindow implements Runnable
             if( ois !=null ) ois.close();
             if( s != null ) s.close();
             
-            System.out.println("Truena 4");
 			Host h = new Host();
 			h.finGUI();
 			h.puerto++;
@@ -147,7 +136,6 @@ public class Server extends MainWindow implements Runnable
         } catch(Exception ex){
             ex.printStackTrace();
         }
-        System.out.println("si cerro server");
 	}
 
 	public void setLabelsText(ArrayList<Client> clients) {
@@ -161,7 +149,6 @@ public class Server extends MainWindow implements Runnable
 	}
 
     public void sendIPs(String message){
-    	System.out.println("send ipes");
     	ArrayList<String> ipes = new ArrayList<String>();
     	
         for(int i=0; i < this.clients.size(); i++){
@@ -198,7 +185,6 @@ public class Server extends MainWindow implements Runnable
 			oos = new ObjectOutputStream(s.getOutputStream());
 			ois = new ObjectInputStream(s.getInputStream());
 
-            System.out.println("Puerto server 1 # " + this.puerto);
 			oos.writeObject(message);
 			//this.btn_enviar.setEnabled(false);
 		}

@@ -86,7 +86,6 @@ public class Client {
 					value = e;
 				} // try
 				ram = (long) value;
-				System.out.println(method.getName() + " = " + value);
 			} // if
 		}// for
 		return ram;
@@ -106,7 +105,6 @@ public class Client {
 					value = e;
 				} // try
 				ram = (long) value;
-				System.out.println(method.getName() + " = " + value);
 			} // if
 		}// for
 		return ram;
@@ -131,7 +129,6 @@ public class Client {
 					value = e;
 				} // try
 				cpu_load = (Double) value;
-				System.out.println(method.getName() + " = " + value);
 			} // if
 		}// for
 		String result = String.format("%.3f", (cpu_load * 100)) + "%";
@@ -148,7 +145,6 @@ public class Client {
 	        {
 	            Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
 	            for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-	            	System.out.printf("InetAddress: %s\n", inetAddress);
 	            	String inetadd = inetAddress + "";
 	            	inetadd = inetadd.substring(1);
 		        	if (inetadd.startsWith("192")) {
@@ -167,13 +163,9 @@ public class Client {
 	}
 
     static void displayInterfaceInformation(NetworkInterface netint) throws SocketException {
-        System.out.printf("Display name: %s\n", netint.getDisplayName());
-        System.out.printf("Name: %s\n", netint.getName());
         Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
         for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-        	System.out.printf("InetAddress: %s\n", inetAddress);
         }
-        System.out.printf("\n");
      }
     
 	private static void printUsage() {
@@ -187,7 +179,7 @@ public class Client {
 				} catch (Exception e) {
 					value = e;
 				} // try
-				System.out.println(method.getName() + " = " + value);
+				//System.out.println(method.getName() + " = " + value);
 			} // if
 		} // for
 	}

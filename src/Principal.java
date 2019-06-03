@@ -55,7 +55,6 @@ public class Principal extends MainWindow
 	public void actionPerformed(ActionEvent arg0)
 	{
 		String boton = arg0.getActionCommand();
-		System.out.println(boton);
 		if (boton == "Host")
 		{
 			Host h = new Host();

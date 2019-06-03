@@ -31,7 +31,6 @@ public class Host extends MainWindow implements Runnable
 
 	Host()
 	{
-		System.out.println(this.puerto + "");
 		MyLabel l_ip = new MyLabel("IP Servidor:");
 		txt_ip = new JTextField(50);
 		txt_ip.requestFocusInWindow();
@@ -69,7 +68,6 @@ public class Host extends MainWindow implements Runnable
 			ois = new ObjectInputStream(s.getInputStream());
 
 			Client c = new Client();
-            System.out.println("Puerto host 1 # " + this.puerto);
 			oos.writeObject(String.format("%s,%s,%s,%s,%s", c.cpu, c.ram, c.os, c.version, c.ip));
 			//this.btn_enviar.setEnabled(false);
 		}
@@ -93,7 +91,6 @@ public class Host extends MainWindow implements Runnable
 			ObjectOutputStream oos = null;
 	
 			Socket s = null;
-            System.out.println("Puerto recibir host # " + this.puerto);
 			ServerSocket ss = new ServerSocket(this.puerto);
 			while (this.run_me)
 			{
@@ -121,7 +118,6 @@ public class Host extends MainWindow implements Runnable
 					if( oos !=null ) oos.close();
 					if( ois !=null ) ois.close();
 					if( s != null ) s.close();
-					System.out.println("Conexion cerrada!");
 				}
 			}
 			
@@ -143,16 +139,12 @@ public class Host extends MainWindow implements Runnable
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
-        System.out.println("si cerro host");
-
 	}
 	
 	//JCGE: Este es el metodo que se encarga de tomar las acciones en los botones
 	public void actionPerformed(ActionEvent arg0)
 	{
 		String boton = arg0.getActionCommand();
-		System.out.println(boton);
 		if (boton == "Enviar")
 		{
 			try {
