@@ -22,9 +22,9 @@ public class Server extends MainWindow
 	public int pc = 0;
 	public ArrayList<MyLabel> labels;
 	public ArrayList<Client> clients;
-	
+
 	public boolean run_me = false;
-	
+
 	Server ()
 	{
 		labels = new ArrayList<MyLabel>();
@@ -35,35 +35,39 @@ public class Server extends MainWindow
 		l_m4 = new MyLabel("-");
 		l_m5 = new MyLabel("-");
 		JPanel loginBox = new JPanel();
-		
+
 		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
 		loginBox.add(l_titulo);
-		
+
 		labels.add(l_m1);
 		labels.add(l_m2);
 		labels.add(l_m3);
 		labels.add(l_m4);
 		labels.add(l_m5);
-		
+
+    Host oHost = new Host();
+
 		this.clients = new ArrayList<Client>();
-		
+    this.clients.add(new Client(oHost.getCpu(), oHost.getAllocatedRam(), oHost.getOS(), oHost.getVersion()));
+    System.out.println(this.clients);
+
 		loginBox.add(l_m1);
 		loginBox.add(l_m2);
 		loginBox.add(l_m3);
 		loginBox.add(l_m4);
 		loginBox.add(l_m5);
-		
+
 		int x = 70,y = 70, b = 700,h = 300;
 		loginBox.setBounds(x, y, b, h+20);
 		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
 	}
-	
+
 	public void run () throws IOException {
 		// TODO Auto-generated method stub
 		ObjectInputStream ois = null;
 		ObjectOutputStream oos = null;
-		
+
 		Socket s = null;
 		ServerSocket ss = new ServerSocket(5400);
 		while (this.run_me)
@@ -104,13 +108,13 @@ public class Server extends MainWindow
 			}
 		}
 	}
-	
+
 	public void setLabelsText(ArrayList<Client> clients) {
 		for (int i = 0; i < clients.size(); i++) {
 			labels.get(i).setText(clients.get(i).labelText() + " 10 Mbps");
 		}
 	}
-	
+
 	public void orderClients() {
 		clients.sort(comparing(Client::getCpu).thenComparing(Client::getRam));
 	}

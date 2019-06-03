@@ -24,11 +24,11 @@ public class Principal extends MainWindow
 	ObjectOutputStream oos = null;
 	Socket s = null;
 	ServerSocket ss = null;
-	
+
 	Principal () {
 		MyLabel l_titulo = new MyLabel("¿Mi computadora es?");
 		JPanel loginBox = new JPanel();
-		
+
 		JButton btn_host = new JButton("Host");
 		JButton btn_server = new JButton("Server");
 
@@ -39,19 +39,19 @@ public class Principal extends MainWindow
 		loginBox.add(l_titulo);
 		loginBox.add(btn_host);
 		loginBox.add(btn_server);
-		
+
 		int x = 70,y = 70, b = 700,h = 300;
 		loginBox.setBounds(x, y, b, h+20);
 		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
 	}
-	
+
 	public static void main(String[] args) {
-		
+
 		Principal p = new Principal();
 		p.finGUI();
 	}
-	
+
 	public void actionPerformed(ActionEvent arg0)
 	{
 		String boton = arg0.getActionCommand();
@@ -63,9 +63,17 @@ public class Principal extends MainWindow
 			this.dispose();
 			return;
 		}
-		
+
 		if (boton == "Server")
 		{
+      Server sGui = new Server();
+      try {
+          sGui.run();
+      } catch(Exception ex){
+        ex.printStackTrace();
+      }
+
+      this.dispose();
 			return;
 		}
 	}
