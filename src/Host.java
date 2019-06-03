@@ -69,6 +69,7 @@ public class Host extends MainWindow implements Runnable
 			ois = new ObjectInputStream(s.getInputStream());
 
 			Client c = new Client();
+            System.out.println("Puerto # " + this.puerto);
 			oos.writeObject(String.format("%s,%s,%s,%s,%s", c.cpu, c.ram, c.os, c.version, c.ip));
 			//this.btn_enviar.setEnabled(false);
 		}
