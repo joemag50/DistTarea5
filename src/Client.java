@@ -26,6 +26,13 @@ public class Client {
 	public String os;
 	public String version;
 
+    public Client(){
+        this.cpu = getCpu();
+        this.ram = getAllocatedRam();
+        this.os = getOS();
+        this.version = getVersion();
+    }
+
 	public Client(String cpu, String ram, String os, String version) {
 		this.cpu = cpu;
 		this.ram = ram;
@@ -41,7 +48,7 @@ public class Client {
 		return Double.parseDouble(ram.substring(0, ram.length() - 3));
 	}
 
-	public double getCpu() {
+	public double getCpuDouble() {
 		return Double.parseDouble(cpu.substring(0, cpu.length() - 3));
 	}
 

@@ -63,11 +63,8 @@ public class Host extends MainWindow
 			oos = new ObjectOutputStream(s.getOutputStream());
 			ois = new ObjectInputStream(s.getInputStream());
 
-			String so = getOS();
-			String version = getVersion();
-			String ram = getAllocatedRam();
-			String cpu = getCpu();
-			oos.writeObject(String.format("%s,%s,%s,%s", cpu, ram, so, version ));
+            Client c = new Client();
+			oos.writeObject(String.format("%s,%s,%s,%s", c.cpu, c.ram, c.os, c.version ));
 
 			this.btn_enviar.setEnabled(false);
 		}

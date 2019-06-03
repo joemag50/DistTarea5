@@ -45,11 +45,11 @@ public class Server extends MainWindow
 		labels.add(l_m4);
 		labels.add(l_m5);
 
-    Host oHost = new Host();
+        Client oClient = new Client();
 
 		this.clients = new ArrayList<Client>();
-    this.clients.add(new Client(oHost.getCpu(), oHost.getAllocatedRam(), oHost.getOS(), oHost.getVersion()));
-    System.out.println(this.clients);
+        this.clients.add(oClient);
+        System.out.println(this.clients);
 
 		loginBox.add(l_m1);
 		loginBox.add(l_m2);
@@ -116,6 +116,6 @@ public class Server extends MainWindow
 	}
 
 	public void orderClients() {
-		clients.sort(comparing(Client::getCpu).thenComparing(Client::getRam));
+		clients.sort(comparing(Client::getCpuDouble).thenComparing(Client::getRam));
 	}
 }

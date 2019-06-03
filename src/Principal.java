@@ -66,14 +66,9 @@ public class Principal extends MainWindow
 
 		if (boton == "Server")
 		{
-      Server sGui = new Server();
-      try {
-          sGui.run();
-      } catch(Exception ex){
-        ex.printStackTrace();
-      }
-
-      this.dispose();
+      Server s = new Server();
+			s.finGUI();
+			this.dispose();
 			return;
 		}
 	}
