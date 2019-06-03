@@ -66,7 +66,11 @@ public class Principal extends MainWindow
 
 		if (boton == "Server")
 		{
+<<<<<<< Updated upstream
       Server s = new Server();
+=======
+			Server s = new Server();
+>>>>>>> Stashed changes
 			s.finGUI();
 			this.dispose();
 			return;

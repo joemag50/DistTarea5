@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
@@ -24,6 +25,8 @@ public class Host extends MainWindow
 {
 	JTextField txt_ip;
 	JButton btn_enviar;
+
+	public boolean run_me = false;
 
 	Host()
 	{
@@ -65,7 +68,6 @@ public class Host extends MainWindow
 
             Client c = new Client();
 			oos.writeObject(String.format("%s,%s,%s,%s", c.cpu, c.ram, c.os, c.version ));
-
 			this.btn_enviar.setEnabled(false);
 		}
 		catch (Exception ex)
@@ -80,7 +82,41 @@ public class Host extends MainWindow
 			if( s != null ) s.close();
 		}
 	}
+	
+	public void run () throws IOException {
+		// TODO Auto-generated method stub
+		ObjectInputStream ois = null;
+		ObjectOutputStream oos = null;
 
+		Socket s = null;
+		ServerSocket ss = new ServerSocket(5400);
+		while (this.run_me)
+		{
+			try
+			{
+				// el ServerSocket me da el Socket
+				s = ss.accept();
+				// informacion en la consola
+				//System.out.println("Se conectaron desde la IP: " +s.getInetAddress());
+				// enmascaro la entrada y salida de bytes
+				ois = new ObjectInputStream( s.getInputStream() );
+				oos = new ObjectOutputStream( s.getOutputStream() );
+				// leo el nombre que envia el cliente
+				String message = (String)ois.readObject();
+				
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			} finally {
+				if( oos !=null ) oos.close();
+				if( ois !=null ) ois.close();
+				if( s != null ) s.close();
+				System.out.println("Conexion cerrada!");
+			}
+		}
+	}
+	
 	//JCGE: Este es el metodo que se encarga de tomar las acciones en los botones
 	public void actionPerformed(ActionEvent arg0)
 	{
