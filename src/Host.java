@@ -68,7 +68,7 @@ public class Host extends MainWindow implements Runnable
 
 			Client c = new Client();
 			oos.writeObject(String.format("%s,%s,%s,%s,%s", c.cpu, c.ram, c.os, c.version, c.ip));
-			this.btn_enviar.setEnabled(false);
+			//this.btn_enviar.setEnabled(false);
 		}
 		catch (Exception ex)
 		{

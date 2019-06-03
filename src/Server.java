@@ -101,7 +101,7 @@ public class Server extends MainWindow implements Runnable
                         this.pc++;
                     }
                     else {
-                        //oos.writeObject(this.clients.get(0).ip);
+                        oos.writeObject(this.clients.get(0).ip);
                         this.run_me = false;
                         System.out.println("Truena 3");
                     }
