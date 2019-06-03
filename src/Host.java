@@ -124,6 +124,13 @@ public class Host extends MainWindow implements Runnable
 			Server server = new Server();
 			server.finGUI();
 			this.dispose();
+            try{
+                server.run_me = true;
+                Thread t1 = new Thread(server);
+                t1.start();
+            } catch(Exception ex){
+                ex.printStackTrace();
+            }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

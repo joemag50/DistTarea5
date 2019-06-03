@@ -104,6 +104,9 @@ public class Server extends MainWindow implements Runnable
                     }
                     else if(!this.clients.get(0).ip.equals(this.oClient.ip)) {
                         System.out.println("Aber tus pies");
+                        if( oos !=null ) oos.close();
+                        if( ois !=null ) ois.close();
+                        if( s != null ) s.close();
                         sendIPs(this.clients.get(0).ip);
                         this.run_me = false;
                         System.out.println("Truena 3");
@@ -122,9 +125,16 @@ public class Server extends MainWindow implements Runnable
                 }
             }
             System.out.println("Truena 4");
-            Host host = new Host();
-            host.finGUI();
-            this.dispose();
+			Host h = new Host();
+			h.finGUI();
+			this.dispose();
+            try{
+                h.run_me = true;
+                Thread t1 = new Thread(h);
+                t1.start();
+            } catch(Exception ex){
+                ex.printStackTrace();
+            }
         } catch(Exception ex){
             ex.printStackTrace();
         }
@@ -141,20 +151,31 @@ public class Server extends MainWindow implements Runnable
 	}
 
     public void sendIPs(String message){
+    	System.out.println("send ipes");
+    	ArrayList<String> ipes = new ArrayList<String>();
+    	
         for(int i=0; i < this.clients.size(); i++){
-            try{
-            	if (message.equals(this.oClient.ip)) {
-            		continue;
-            	}
+            if (clients.get(i).ip != this.oClient.ip && !searchArrayList(ipes, clients.get(i).ip) ) {
+            	ipes.add(clients.get(i).ip);
                 RequestServer(clients.get(i).ip, message);
-            } catch(Exception ex){
-                ex.printStackTrace();
             }
-
         }
     }
+    
+    public boolean searchArrayList(ArrayList<String> array, String texto)
+    {
+    	boolean encontrado = false;
+    	for (String txt : array)
+    	{
+    		if (txt.equals(texto)) {
+    			encontrado = true;
+    			break;
+    		}
+    	}
+    	return encontrado;
+    }
 
-	public void RequestServer (String ip, String message) throws IOException
+	public void RequestServer (String ip, String message)
 	{
 		// TODO Auto-generated method stub
 		ObjectOutputStream oos = null;
@@ -176,9 +197,27 @@ public class Server extends MainWindow implements Runnable
 		}
 		finally
 		{
-			if( ois != null ) ois.close();
-			if( oos != null ) oos.close();
-			if( s != null ) s.close();
+			if( ois != null )
+				try {
+					ois.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			if( oos != null )
+				try {
+					oos.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			if( s != null )
+				try {
+					s.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 	}
 }
