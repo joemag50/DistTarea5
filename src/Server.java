@@ -29,6 +29,7 @@ public class Server extends MainWindow implements Runnable
 
 	Server ()
 	{
+		System.out.println(this.puerto + "");
 		labels = new ArrayList<MyLabel>();
 		MyLabel l_titulo = new MyLabel("CPU | RAM | SO | Version SO | Ancho de banda | IP");
 		l_m1 = new MyLabel("-");

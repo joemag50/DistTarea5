@@ -31,6 +31,7 @@ public class Host extends MainWindow implements Runnable
 
 	Host()
 	{
+		System.out.println(this.puerto + "");
 		MyLabel l_ip = new MyLabel("IP Servidor:");
 		txt_ip = new JTextField(50);
 		txt_ip.requestFocusInWindow();
