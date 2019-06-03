@@ -121,6 +121,10 @@ public class Host extends MainWindow implements Runnable
 				}
 			}
 			
+            if( oos !=null ) oos.close();
+            if( ois !=null ) ois.close();
+            if( s != null ) s.close();
+
 			Server server = new Server();
 			server.finGUI();
 			this.dispose();

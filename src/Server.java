@@ -124,6 +124,11 @@ public class Server extends MainWindow implements Runnable
                     System.out.println("Conexion cerrada!");
                 }
             }
+            
+            if( oos !=null ) oos.close();
+            if( ois !=null ) ois.close();
+            if( s != null ) s.close();
+            
             System.out.println("Truena 4");
 			Host h = new Host();
 			h.finGUI();
