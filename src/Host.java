@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
@@ -135,6 +136,18 @@ public class Host extends MainWindow implements Runnable
                 t1.start();
             } catch(Exception ex){
                 ex.printStackTrace();
+            }
+        } catch(BindException ex){
+			Server server = new Server();
+			server.finGUI();
+			server.puerto++;
+			this.dispose();
+            try{
+                server.run_me = true;
+                Thread t1 = new Thread(server);
+                t1.start();
+            } catch(Exception ex1){
+                ex1.printStackTrace();
             }
 		} catch (Exception ex) {
 			ex.printStackTrace();

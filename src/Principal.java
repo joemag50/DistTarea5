@@ -60,7 +60,6 @@ public class Principal extends MainWindow
 			Host h = new Host();
 			h.finGUI();
 			this.dispose();
-			h.puerto++;
             try{
                 h.run_me = true;
                 Thread t1 = new Thread(h);
@@ -76,7 +75,6 @@ public class Principal extends MainWindow
 			Server s = new Server();
 			s.finGUI();
 			this.dispose();
-			s.puerto++;
             try{
                 s.run_me = true;
                 Thread t1 = new Thread(s);
