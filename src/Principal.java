@@ -61,6 +61,13 @@ public class Principal extends MainWindow
 			Host h = new Host();
 			h.finGUI();
 			this.dispose();
+			try {
+				h.run_me = true;
+				h.run();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return;
 		}
 
