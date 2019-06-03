@@ -28,7 +28,7 @@ public class Server extends MainWindow
 	Server ()
 	{
 		labels = new ArrayList<MyLabel>();
-		MyLabel l_titulo = new MyLabel("CPU | RAM | SO | Version SO | Ancho de banda");
+		MyLabel l_titulo = new MyLabel("CPU | RAM | SO | Version SO | Ancho de banda | IP");
 		l_m1 = new MyLabel("-");
 		l_m2 = new MyLabel("-");
 		l_m3 = new MyLabel("-");
@@ -47,9 +47,10 @@ public class Server extends MainWindow
 
         Client oClient = new Client();
 
-		this.clients = new ArrayList<Client>();
-        this.clients.add(oClient);
-        System.out.println(this.clients);
+		clients = new ArrayList<Client>();
+        clients.add(oClient);
+        this.orderClients();
+        this.setLabelsText(this.clients);
 
 		loginBox.add(l_m1);
 		loginBox.add(l_m2);
@@ -95,6 +96,10 @@ public class Server extends MainWindow
 					//);
 					this.pc++;
 				}
+                else {
+                    oos.writeObject("");// poner IP
+                    this.run_me = false;
+                }
 				//System.out.println(nom);
 			}
 			catch (Exception ex)
@@ -107,6 +112,9 @@ public class Server extends MainWindow
 				System.out.println("Conexion cerrada!");
 			}
 		}
+        Host host = new Host();
+        host.finGUI();
+        this.dispose();
 	}
 
 	public void setLabelsText(ArrayList<Client> clients) {
