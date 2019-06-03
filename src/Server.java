@@ -125,7 +125,6 @@ public class Server extends MainWindow implements Runnable
             
 			Host h = new Host();
 			h.finGUI();
-			h.puerto++;
 			this.dispose();
             try{
                 h.run_me = true;
@@ -137,7 +136,6 @@ public class Server extends MainWindow implements Runnable
         } catch(BindException ex){
 			Host h = new Host();
 			h.finGUI();
-			h.puerto++;
 			this.dispose();
             try{
                 h.run_me = true;
