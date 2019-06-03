@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
 
+import java.awt.event.ActionEvent;
+
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -24,17 +26,50 @@ public class Principal extends MainWindow
 	ServerSocket ss = null;
 	
 	Principal () {
+		MyLabel l_titulo = new MyLabel("¿Mi computadora es?");
+		JPanel loginBox = new JPanel();
+		
+		JButton btn_host = new JButton("Host");
+		JButton btn_server = new JButton("Server");
 
+		btn_host.addActionListener(this);
+		btn_server.addActionListener(this);
+
+		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
+		loginBox.add(l_titulo);
+		loginBox.add(btn_host);
+		loginBox.add(btn_server);
+		
+		int x = 70,y = 70, b = 700,h = 300;
+		loginBox.setBounds(x, y, b, h+20);
+		loginBox.setBackground(colores.get(0));
+		panelCentro.add(loginBox);
 	}
 	
 	public static void main(String[] args) {
 		
-		Server server = new Server();
-		server.finGUI();
+		Principal p = new Principal();
+		p.finGUI();
 		
 		while (true)
 		{
 			
+		}
+	}
+	
+	public void actionPerformed(ActionEvent arg0)
+	{
+		String boton = arg0.getActionCommand();
+		System.out.println(boton);
+		if (boton == "Host")
+		{
+			
+			return;
+		}
+		
+		if (boton == "Server")
+		{
+			return;
 		}
 	}
 }
