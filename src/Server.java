@@ -30,6 +30,7 @@ public class Server extends MainWindow implements Runnable
 
 	Server ()
 	{
+		pc = 0;
 		labels = new ArrayList<MyLabel>();
 		MyLabel l_puerto = new MyLabel("Puerto: " + puerto);
 
@@ -91,10 +92,10 @@ public class Server extends MainWindow implements Runnable
                     oos = new ObjectOutputStream( s.getOutputStream() );
                     // leo el nombre que envia el cliente
                     String nom = (String)ois.readObject();
+                    System.out.println("Entro al if");
+                    String[] respuesta = nom.split(",");
+                    this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
                     if (this.pc < this.labels.size() - 2) {
-                        String ip = "" + s.getInetAddress();
-                        String[] respuesta = nom.split(",");
-                        this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
                         this.orderClients();
                         this.setLabelsText(this.clients);
                         //server.labels.get(server.pc).setText(
@@ -103,6 +104,7 @@ public class Server extends MainWindow implements Runnable
                         this.pc++;
                     }
                     else if(!this.clients.get(0).ip.equals(this.oClient.ip)) {
+                    	System.out.println("Entro al else if");
                         if( oos !=null ) oos.close();
                         if( ois !=null ) ois.close();
                         if( s != null ) s.close();
@@ -156,7 +158,20 @@ public class Server extends MainWindow implements Runnable
     	ArrayList<String> ipes = new ArrayList<String>();
     	
         for(int i=0; i < this.clients.size(); i++){
+        	boolean b = clients.get(i).ip != this.oClient.ip && !searchArrayList(ipes, clients.get(i).ip);
+        	boolean bb = !searchArrayList(ipes, clients.get(i).ip);
+        	System.out.println();
+        	System.out.println(b);
+        	System.out.println();
+        	System.out.println(bb);
             if (clients.get(i).ip != this.oClient.ip && !searchArrayList(ipes, clients.get(i).ip) ) {
+            	System.out.println();
+            	System.out.println(clients.get(i).ip);
+            	System.out.println();
+            	System.out.println(ipes);
+            	System.out.println();
+            	System.out.println(i);
+            	System.out.println();
             	ipes.add(clients.get(i).ip);
                 RequestServer(clients.get(i).ip, message);
             }
