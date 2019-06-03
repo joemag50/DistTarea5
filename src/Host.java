@@ -22,22 +22,31 @@ import java.lang.reflect.Modifier;
 
 public class Host extends MainWindow
 {
+	JTextField txt_ip;
+	JButton btn_enviar;
+	
 	Host()
 	{
-		//JCGE: Propiedades Generales
-		this.setExtendedState(MAXIMIZED_BOTH);
+		MyLabel l_ip = new MyLabel("IP Servidor:");
+		txt_ip = new JTextField(50);
+		txt_ip.requestFocusInWindow();
 		
-		//JCGE: Propiedades Particulares
+		MyLabel l_titulo = new MyLabel("¿Enviar datos?");
+		btn_enviar = new JButton("Enviar");
 		JPanel loginBox = new JPanel();
-		JButton boton = new JButton("Enviar");
-		boton.addActionListener(this);
 		
+		btn_enviar.addActionListener(this);
+
 		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
-		loginBox.add(boton);
-		//JCGE: Vamos a prepararnos para poner una imagen aca loca
-		int x = 320,y = 450,b = 500,h = 100;
-		loginBox.setBounds((WIDTH.intValue()/2)-260,y,b,h+20);
-		loginBox.setBackground(colores.get(4));
+		loginBox.add(l_ip);
+		loginBox.add(txt_ip);
+		loginBox.add(l_titulo);
+		loginBox.add(btn_enviar);
+		
+		
+		int x = 70,y = 70, b = 700,h = 100;
+		loginBox.setBounds(x, y, b, h);
+		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
 	}
 	
@@ -50,7 +59,7 @@ public class Host extends MainWindow
 		
 		try
 		{
-			s = new Socket("127.0.0.1",5400);
+			s = new Socket(this.txt_ip.getText(),5400);
 			oos = new ObjectOutputStream(s.getOutputStream());
 			ois = new ObjectInputStream(s.getInputStream());
 			
@@ -59,6 +68,8 @@ public class Host extends MainWindow
 			String ram = getAllocatedRam();
 			String cpu = getCpu();
 			oos.writeObject(String.format("%s,%s,%s,%s", cpu, ram, so, version ));
+			
+			this.btn_enviar.setEnabled(false);
 		}
 		catch (Exception ex)
 		{

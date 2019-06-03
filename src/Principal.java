@@ -50,11 +50,6 @@ public class Principal extends MainWindow
 		
 		Principal p = new Principal();
 		p.finGUI();
-		
-		while (true)
-		{
-			
-		}
 	}
 	
 	public void actionPerformed(ActionEvent arg0)
@@ -63,7 +58,9 @@ public class Principal extends MainWindow
 		System.out.println(boton);
 		if (boton == "Host")
 		{
-			
+			Host h = new Host();
+			h.finGUI();
+			this.dispose();
 			return;
 		}
 		
