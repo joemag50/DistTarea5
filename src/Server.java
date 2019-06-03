@@ -197,7 +197,7 @@ public class Server extends MainWindow implements Runnable
 			oos = new ObjectOutputStream(s.getOutputStream());
 			ois = new ObjectInputStream(s.getInputStream());
 
-            System.out.println("Puerto # " + this.puerto);
+            System.out.println("Puerto server 1 # " + this.puerto);
 			oos.writeObject(message);
 			//this.btn_enviar.setEnabled(false);
 		}
