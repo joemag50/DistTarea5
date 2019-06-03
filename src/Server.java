@@ -89,12 +89,12 @@ public class Server extends MainWindow implements Runnable
                     oos = new ObjectOutputStream( s.getOutputStream() );
                     // leo el nombre que envia el cliente
                     String nom = (String)ois.readObject();
-                    this.orderClients();
-                    this.setLabelsText(this.clients);
                     if (this.pc < this.labels.size() - 2) {
                         String ip = "" + s.getInetAddress();
                         String[] respuesta = nom.split(",");
                         this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
+                        this.orderClients();
+                        this.setLabelsText(this.clients);
                         System.out.println(this.labels);
                         //server.labels.get(server.pc).setText(
                         //	String.format("%s %s %s %s", respuesta[0], respuesta[1], respuesta[2], respuesta[3])
@@ -104,9 +104,6 @@ public class Server extends MainWindow implements Runnable
                     }
                     else if(!this.clients.get(0).ip.equals(this.oClient.ip)) {
                         System.out.println("Aber tus pies");
-                        if( oos !=null ) oos.close();
-                        if( ois !=null ) ois.close();
-                        if( s != null ) s.close();
                         sendIPs(this.clients.get(0).ip);
                         this.run_me = false;
                         System.out.println("Truena 3");

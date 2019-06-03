@@ -104,7 +104,8 @@ public class Host extends MainWindow implements Runnable
 					oos = new ObjectOutputStream( s.getOutputStream() );
 					// leo el nombre que envia el cliente
 					String message = (String)ois.readObject();
-					String myIP = ss.getInetAddress() + "";
+                    Client c = new Client();
+					String myIP = c.ip;
 					if ( myIP.equals(message) ) {
 						this.run_me = false;
 					}
