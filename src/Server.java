@@ -25,6 +25,7 @@ public class Server extends MainWindow implements Runnable
     public Client oClient;
 
 	public boolean run_me = false;
+	public int puerto = 5400;
 
 	Server ()
 	{
@@ -72,7 +73,7 @@ public class Server extends MainWindow implements Runnable
             ObjectOutputStream oos = null;
 
             Socket s = null;
-            ServerSocket ss = new ServerSocket(5400);
+            ServerSocket ss = new ServerSocket(this.puerto);
             System.out.println("Truena 1");
             while (this.run_me)
             {
@@ -132,6 +133,7 @@ public class Server extends MainWindow implements Runnable
             System.out.println("Truena 4");
 			Host h = new Host();
 			h.finGUI();
+			h.puerto++;
 			this.dispose();
             try{
                 h.run_me = true;
@@ -143,6 +145,7 @@ public class Server extends MainWindow implements Runnable
         } catch(Exception ex){
             ex.printStackTrace();
         }
+        System.out.println("si cerro server");
 	}
 
 	public void setLabelsText(ArrayList<Client> clients) {
@@ -189,7 +192,7 @@ public class Server extends MainWindow implements Runnable
 
 		try
 		{
-			s = new Socket(ip ,5400);
+			s = new Socket(ip, this.puerto);
 			oos = new ObjectOutputStream(s.getOutputStream());
 			ois = new ObjectInputStream(s.getInputStream());
 

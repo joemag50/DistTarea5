@@ -27,6 +27,7 @@ public class Host extends MainWindow implements Runnable
 	JButton btn_enviar;
 
 	public boolean run_me = false;
+	public int puerto = 5400;
 
 	Host()
 	{
@@ -62,7 +63,7 @@ public class Host extends MainWindow implements Runnable
 
 		try
 		{
-			s = new Socket(this.txt_ip.getText(),5400);
+			s = new Socket(this.txt_ip.getText(), this.puerto);
 			oos = new ObjectOutputStream(s.getOutputStream());
 			ois = new ObjectInputStream(s.getInputStream());
 
@@ -90,7 +91,7 @@ public class Host extends MainWindow implements Runnable
 			ObjectOutputStream oos = null;
 	
 			Socket s = null;
-			ServerSocket ss = new ServerSocket(5400);
+			ServerSocket ss = new ServerSocket(this.puerto);
 			while (this.run_me)
 			{
 				try
@@ -127,6 +128,7 @@ public class Host extends MainWindow implements Runnable
 
 			Server server = new Server();
 			server.finGUI();
+			server.puerto++;
 			this.dispose();
             try{
                 server.run_me = true;
@@ -138,6 +140,9 @@ public class Host extends MainWindow implements Runnable
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		
+        System.out.println("si cerro host");
+
 	}
 	
 	//JCGE: Este es el metodo que se encarga de tomar las acciones en los botones
