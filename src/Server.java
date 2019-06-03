@@ -22,6 +22,7 @@ public class Server extends MainWindow implements Runnable
 	public int pc = 0;
 	public ArrayList<MyLabel> labels;
 	public ArrayList<Client> clients;
+    public Client oClient;
 
 	public boolean run_me = false;
 
@@ -45,7 +46,7 @@ public class Server extends MainWindow implements Runnable
 		labels.add(l_m4);
 		labels.add(l_m5);
 
-        Client oClient = new Client();
+        this.oClient = new Client();
 
 		clients = new ArrayList<Client>();
         clients.add(oClient);
@@ -88,7 +89,7 @@ public class Server extends MainWindow implements Runnable
                     oos = new ObjectOutputStream( s.getOutputStream() );
                     // leo el nombre que envia el cliente
                     String nom = (String)ois.readObject();
-                    if (this.pc < this.labels.size()) {
+                    if (this.pc < this.labels.size() - 1) {
                         String ip = "" + s.getInetAddress();
                         String[] respuesta = nom.split(",");
                         this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
@@ -99,11 +100,14 @@ public class Server extends MainWindow implements Runnable
                         //	String.format("%s %s %s %s", respuesta[0], respuesta[1], respuesta[2], respuesta[3])
                         //);
                         this.pc++;
+                        System.out.println(this.pc);
                     }
-                    else {
+                    else if(!this.clients.get(0).ip.equals(this.oClient.ip)) {
+                        System.out.println("Aber tus pies");
                         oos.writeObject(this.clients.get(0).ip);
                         this.run_me = false;
                         System.out.println("Truena 3");
+                        break;
                     }
                     //System.out.println(nom);
                 }
