@@ -74,6 +74,7 @@ public class Server extends MainWindow implements Runnable
             ObjectOutputStream oos = null;
 
             Socket s = null;
+            System.out.println("Puerto recibir server # " + this.puerto);
             ServerSocket ss = new ServerSocket(this.puerto);
             System.out.println("Truena 1");
             while (this.run_me)

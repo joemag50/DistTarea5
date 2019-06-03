@@ -93,6 +93,7 @@ public class Host extends MainWindow implements Runnable
 			ObjectOutputStream oos = null;
 	
 			Socket s = null;
+            System.out.println("Puerto recibir host # " + this.puerto);
 			ServerSocket ss = new ServerSocket(this.puerto);
 			while (this.run_me)
 			{
