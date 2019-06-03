@@ -40,12 +40,7 @@ public class MainWindow extends JFrame implements ActionListener, MenuListener
 	public JPanel panelNorte, panelEste, panelOeste, panelSur;
 	public static JDesktopPane panelCentro;
 	public MyLabel l_titulo, elTiempo;
-	public JMenuBar menuBar;
 	
-	public ArrayList<JMenu> menuz;
-	public ArrayList<JMenuItem> menuItems;
-	//public String[] nombres_menu = {"Administración","Operación","Mi Cuenta"};
-	public String[] nombres_menu = {"Administración","Mi Cuenta"};
 	public static ArrayList<Color> colores;
 	//JCGE: Constructor aca mamalon
 	MainWindow ()

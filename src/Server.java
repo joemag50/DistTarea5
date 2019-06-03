@@ -18,32 +18,32 @@ import javax.swing.JTextField;
 
 public class Server extends MainWindow
 {
-	public MyLabel l_m1, l_m2, l_m3, l_m4;
+	public MyLabel l_m1, l_m2, l_m3, l_m4, l_m5;
 	public int pc = 0;
 	public ArrayList<MyLabel> labels;
 	public ArrayList<Client> clients;
 	
+	public boolean run_me = false;
+	
 	Server ()
 	{
-		//JCGE: Propiedades Generales
-		//this.setExtendedState(MAXIMIZED_BOTH);
-		
-		//JCGE: Propiedades Particulares
 		labels = new ArrayList<MyLabel>();
 		MyLabel l_titulo = new MyLabel("CPU | RAM | SO | Version SO | Ancho de banda");
 		l_m1 = new MyLabel("-");
 		l_m2 = new MyLabel("-");
 		l_m3 = new MyLabel("-");
 		l_m4 = new MyLabel("-");
+		l_m5 = new MyLabel("-");
 		JPanel loginBox = new JPanel();
-
+		
 		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
 		loginBox.add(l_titulo);
-
+		
 		labels.add(l_m1);
 		labels.add(l_m2);
 		labels.add(l_m3);
 		labels.add(l_m4);
+		labels.add(l_m5);
 		
 		this.clients = new ArrayList<Client>();
 		
@@ -51,26 +51,22 @@ public class Server extends MainWindow
 		loginBox.add(l_m2);
 		loginBox.add(l_m3);
 		loginBox.add(l_m4);
-
+		loginBox.add(l_m5);
 		
-		//JCGE: Vamos a prepararnos para poner una imagen aca loca
 		int x = 70,y = 70, b = 700,h = 300;
 		loginBox.setBounds(x, y, b, h+20);
 		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public void run () throws IOException {
 		// TODO Auto-generated method stub
 		ObjectInputStream ois = null;
 		ObjectOutputStream oos = null;
 		
 		Socket s = null;
 		ServerSocket ss = new ServerSocket(5400);
-		Server server = new Server();
-		server.finGUI();
-
-		while (true)
+		while (this.run_me)
 		{
 			try
 			{
@@ -83,17 +79,17 @@ public class Server extends MainWindow
 				oos = new ObjectOutputStream( s.getOutputStream() );
 				// leo el nombre que envia el cliente
 				String nom = (String)ois.readObject();
-				if (server.pc < server.labels.size()) {
+				if (this.pc < this.labels.size()) {
 					String ip = "" + s.getInetAddress();
 					String[] respuesta = nom.split(",");
-					server.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3]));
-					server.orderClients();
-					server.setLabelsText(server.clients);
-					System.out.println(server.labels);
+					this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3]));
+					this.orderClients();
+					this.setLabelsText(this.clients);
+					System.out.println(this.labels);
 					//server.labels.get(server.pc).setText(
 					//	String.format("%s %s %s %s", respuesta[0], respuesta[1], respuesta[2], respuesta[3])
 					//);
-					server.pc++;
+					this.pc++;
 				}
 				//System.out.println(nom);
 			}
