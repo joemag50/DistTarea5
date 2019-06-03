@@ -3,8 +3,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -134,15 +140,42 @@ public class Client {
 
 	public String getIp() {
 		String ip = "";
+		
+        Enumeration<NetworkInterface> nets;
 		try {
-			ServerSocket ss = new ServerSocket(5401);
-			ip = "" + ss.getInetAddress();
-			ss.close();
-		} catch(Exception e) {
-			
+			nets = NetworkInterface.getNetworkInterfaces();
+	        for (NetworkInterface netint : Collections.list(nets))
+	        {
+	            Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+	            for (InetAddress inetAddress : Collections.list(inetAddresses)) {
+	            	System.out.printf("InetAddress: %s\n", inetAddress);
+	            	String inetadd = inetAddress + "";
+	            	inetadd = inetadd.substring(1);
+		        	if (inetadd.startsWith("192")) {
+		        		ip = inetadd;
+		        	}
+	            }
+
+	        }
+	        
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
 		return ip;
 	}
+
+    static void displayInterfaceInformation(NetworkInterface netint) throws SocketException {
+        System.out.printf("Display name: %s\n", netint.getDisplayName());
+        System.out.printf("Name: %s\n", netint.getName());
+        Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+        for (InetAddress inetAddress : Collections.list(inetAddresses)) {
+        	System.out.printf("InetAddress: %s\n", inetAddress);
+        }
+        System.out.printf("\n");
+     }
+    
 	private static void printUsage() {
 		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
 		for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
