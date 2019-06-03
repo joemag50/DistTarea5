@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Server extends MainWindow
+public class Server extends MainWindow implements Runnable
 {
 	public MyLabel l_m1, l_m2, l_m3, l_m4, l_m5;
 	public int pc = 0;
@@ -64,57 +64,66 @@ public class Server extends MainWindow
 		panelCentro.add(loginBox);
 	}
 
-	public void run () throws IOException {
-		// TODO Auto-generated method stub
-		ObjectInputStream ois = null;
-		ObjectOutputStream oos = null;
+	public void run () {
+        try {
+            // TODO Auto-generated method stub
+            ObjectInputStream ois = null;
+            ObjectOutputStream oos = null;
 
-		Socket s = null;
-		ServerSocket ss = new ServerSocket(5400);
-		while (this.run_me)
-		{
-			try
-			{
-				// el ServerSocket me da el Socket
-				s = ss.accept();
-				// informacion en la consola
-				//System.out.println("Se conectaron desde la IP: " +s.getInetAddress());
-				// enmascaro la entrada y salida de bytes
-				ois = new ObjectInputStream( s.getInputStream() );
-				oos = new ObjectOutputStream( s.getOutputStream() );
-				// leo el nombre que envia el cliente
-				String nom = (String)ois.readObject();
-				if (this.pc < this.labels.size()) {
-					String ip = "" + s.getInetAddress();
-					String[] respuesta = nom.split(",");
-					this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
-					this.orderClients();
-					this.setLabelsText(this.clients);
-					System.out.println(this.labels);
-					//server.labels.get(server.pc).setText(
-					//	String.format("%s %s %s %s", respuesta[0], respuesta[1], respuesta[2], respuesta[3])
-					//);
-					this.pc++;
-				}
-                else {
-                    oos.writeObject("");// poner IP
-                    this.run_me = false;
+            Socket s = null;
+            ServerSocket ss = new ServerSocket(5400);
+            System.out.println("Truena 1");
+            while (this.run_me)
+            {
+                System.out.println("Truena 2");
+                try
+                {
+                    System.out.println("Entra");
+                    // el ServerSocket me da el Socket
+                    s = ss.accept();
+                    // informacion en la consola
+                    //System.out.println("Se conectaron desde la IP: " +s.getInetAddress());
+                    // enmascaro la entrada y salida de bytes
+                    ois = new ObjectInputStream( s.getInputStream() );
+                    oos = new ObjectOutputStream( s.getOutputStream() );
+                    // leo el nombre que envia el cliente
+                    String nom = (String)ois.readObject();
+                    if (this.pc < this.labels.size()) {
+                        String ip = "" + s.getInetAddress();
+                        String[] respuesta = nom.split(",");
+                        this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
+                        this.orderClients();
+                        this.setLabelsText(this.clients);
+                        System.out.println(this.labels);
+                        //server.labels.get(server.pc).setText(
+                        //	String.format("%s %s %s %s", respuesta[0], respuesta[1], respuesta[2], respuesta[3])
+                        //);
+                        this.pc++;
+                    }
+                    else {
+                        //oos.writeObject(this.clients.get(0).ip);
+                        this.run_me = false;
+                        System.out.println("Truena 3");
+                    }
+                    //System.out.println(nom);
                 }
-				//System.out.println(nom);
-			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace();
-			} finally {
-				if( oos !=null ) oos.close();
-				if( ois !=null ) ois.close();
-				if( s != null ) s.close();
-				System.out.println("Conexion cerrada!");
-			}
-		}
-        Host host = new Host();
-        host.finGUI();
-        this.dispose();
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                } finally {
+                    if( oos !=null ) oos.close();
+                    if( ois !=null ) ois.close();
+                    if( s != null ) s.close();
+                    System.out.println("Conexion cerrada!");
+                }
+            }
+            System.out.println("Truena 4");
+            Host host = new Host();
+            host.finGUI();
+            this.dispose();
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
 	}
 
 	public void setLabelsText(ArrayList<Client> clients) {

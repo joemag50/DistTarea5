@@ -76,6 +76,13 @@ public class Principal extends MainWindow
 			Server s = new Server();
 			s.finGUI();
 			this.dispose();
+            try{
+                s.run_me = true;
+                Thread t1 = new Thread(s);
+                t1.start();
+            } catch(Exception ex){
+                ex.printStackTrace();
+            }
 			return;
 		}
 	}
