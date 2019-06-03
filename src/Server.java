@@ -104,6 +104,9 @@ public class Server extends MainWindow implements Runnable
                     }
                     else if(!this.clients.get(0).ip.equals(this.oClient.ip)) {
                         System.out.println("Aber tus pies");
+                        if( oos !=null ) oos.close();
+                        if( ois !=null ) ois.close();
+                        if( s != null ) s.close();
                         sendIPs(this.clients.get(0).ip);
                         this.run_me = false;
                         System.out.println("Truena 3");
