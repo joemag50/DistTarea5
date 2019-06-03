@@ -21,7 +21,7 @@ import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-public class Host extends MainWindow
+public class Host extends MainWindow implements Runnable
 {
 	JTextField txt_ip;
 	JButton btn_enviar;
@@ -83,45 +83,49 @@ public class Host extends MainWindow
 		}
 	}
 	
-	public void run () throws IOException {
-		// TODO Auto-generated method stub
-		ObjectInputStream ois = null;
-		ObjectOutputStream oos = null;
-
-		Socket s = null;
-		ServerSocket ss = new ServerSocket(5400);
-		while (this.run_me)
-		{
-			try
+	public void run () {
+		try {
+			// TODO Auto-generated method stub
+			ObjectInputStream ois = null;
+			ObjectOutputStream oos = null;
+	
+			Socket s = null;
+			ServerSocket ss = new ServerSocket(5400);
+			while (this.run_me)
 			{
-				// el ServerSocket me da el Socket
-				s = ss.accept();
-				// informacion en la consola
-				//System.out.println("Se conectaron desde la IP: " +s.getInetAddress());
-				// enmascaro la entrada y salida de bytes
-				ois = new ObjectInputStream( s.getInputStream() );
-				oos = new ObjectOutputStream( s.getOutputStream() );
-				// leo el nombre que envia el cliente
-				String message = (String)ois.readObject();
-				String myIP = ss.getInetAddress() + "";
-				if ( myIP.equals(message) ) {
-					this.run_me = false;
+				try
+				{
+					// el ServerSocket me da el Socket
+					s = ss.accept();
+					// informacion en la consola
+					//System.out.println("Se conectaron desde la IP: " +s.getInetAddress());
+					// enmascaro la entrada y salida de bytes
+					ois = new ObjectInputStream( s.getInputStream() );
+					oos = new ObjectOutputStream( s.getOutputStream() );
+					// leo el nombre que envia el cliente
+					String message = (String)ois.readObject();
+					String myIP = ss.getInetAddress() + "";
+					if ( myIP.equals(message) ) {
+						this.run_me = false;
+					}
+				}
+				catch (Exception ex)
+				{
+					ex.printStackTrace();
+				} finally {
+					if( oos !=null ) oos.close();
+					if( ois !=null ) ois.close();
+					if( s != null ) s.close();
+					System.out.println("Conexion cerrada!");
 				}
 			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace();
-			} finally {
-				if( oos !=null ) oos.close();
-				if( ois !=null ) ois.close();
-				if( s != null ) s.close();
-				System.out.println("Conexion cerrada!");
-			}
+			
+			Server server = new Server();
+			server.finGUI();
+			this.dispose();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-		
-		Server server = new Server();
-		server.finGUI();
-		this.dispose();
 	}
 	
 	//JCGE: Este es el metodo que se encarga de tomar las acciones en los botones
