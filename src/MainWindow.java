@@ -56,9 +56,8 @@ public class MainWindow extends JFrame implements ActionListener, MenuListener
 		//JCGE: Preparamos la ventana
 		this.setTitle("Main Window");
 		//this.setSize(MainWindow.WIDTH.intValue(), MainWindow.HEIGHT.intValue());
-		//this.setSize(800, 599);
-		this.setExtendedState(MAXIMIZED_BOTH);
-		this.setResizable(false);
+		//this.setExtendedState(MAXIMIZED_BOTH);
+		this.setResizable(true);
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -98,8 +97,8 @@ public class MainWindow extends JFrame implements ActionListener, MenuListener
 		panelSur.add(statusRightPanel, BorderLayout.SOUTH);
 		
 		//Les asignamos un tamaño
-		statusPanel.setPreferredSize(new Dimension(500, 20));
-		statusRightPanel.setPreferredSize(new Dimension(500, 20));
+		statusPanel.setPreferredSize(new Dimension(300, 20));
+		statusRightPanel.setPreferredSize(new Dimension(300, 20));
 		
 		//Les asignamos una plantilla de acomodo
 		statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
@@ -107,7 +106,7 @@ public class MainWindow extends JFrame implements ActionListener, MenuListener
 		
 		//Etiquetas con la informacion
 		elTiempo = new MyLabel("Fecha: " + dateFormat.format(currentTime));
-		l_titulo = new MyLabel("Distribuidos Tarea 2");
+		l_titulo = new MyLabel("Distribuidos Tarea 5");
 		//Agregamos las etiquetas a los paneles con borde
 		statusRightPanel.add(l_titulo);
 		statusPanel.add(elTiempo);
@@ -123,6 +122,7 @@ public class MainWindow extends JFrame implements ActionListener, MenuListener
 		frame.add(panelCentro, BorderLayout.CENTER);
 		this.setLocationRelativeTo(null);
 		pack();
+		this.setSize(900, 600);
 	}
 
 	public void setWindowSize(MainWindow e, int x, int y)

@@ -26,7 +26,7 @@ public class Server extends MainWindow
 	Server ()
 	{
 		//JCGE: Propiedades Generales
-		this.setExtendedState(MAXIMIZED_BOTH);
+		//this.setExtendedState(MAXIMIZED_BOTH);
 		
 		//JCGE: Propiedades Particulares
 		labels = new ArrayList<MyLabel>();
@@ -54,8 +54,8 @@ public class Server extends MainWindow
 
 		
 		//JCGE: Vamos a prepararnos para poner una imagen aca loca
-		int x = 320,y = 250,b = 700,h = 200;
-		loginBox.setBounds((WIDTH.intValue()/2)-340, y, b, h+20);
+		int x = 70,y = 70, b = 700,h = 300;
+		loginBox.setBounds(x, y, b, h+20);
 		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
 	}
@@ -69,7 +69,6 @@ public class Server extends MainWindow
 		ServerSocket ss = new ServerSocket(5400);
 		Server server = new Server();
 		server.finGUI();
-		server.setSize(MainWindow.WIDTH.intValue(), MainWindow.HEIGHT.intValue());
 
 		while (true)
 		{
