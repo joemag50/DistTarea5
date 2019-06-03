@@ -128,6 +128,7 @@ public class Server extends MainWindow implements Runnable
             
 			Host h = new Host();
 			h.finGUI();
+			h.puerto++;
 			this.dispose();
             try{
                 h.run_me = true;
