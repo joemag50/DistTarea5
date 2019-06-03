@@ -31,6 +31,8 @@ public class Server extends MainWindow implements Runnable
 	Server ()
 	{
 		labels = new ArrayList<MyLabel>();
+		MyLabel l_puerto = new MyLabel("Puerto: " + puerto);
+
 		MyLabel l_titulo = new MyLabel("CPU | RAM | SO | Version SO | Ancho de banda | IP");
 		l_m1 = new MyLabel("-");
 		l_m2 = new MyLabel("-");
@@ -40,6 +42,7 @@ public class Server extends MainWindow implements Runnable
 		JPanel loginBox = new JPanel();
 
 		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
+		loginBox.add(l_puerto);
 		loginBox.add(l_titulo);
 
 		labels.add(l_m1);
@@ -133,18 +136,6 @@ public class Server extends MainWindow implements Runnable
                 t1.start();
             } catch(Exception ex){
                 ex.printStackTrace();
-            }
-        } catch(BindException ex){
-			Host h = new Host();
-			h.finGUI();
-			h.puerto++;
-			this.dispose();
-            try{
-                h.run_me = true;
-                Thread t1 = new Thread(h);
-                t1.start();
-            } catch(Exception ex1){
-                ex1.printStackTrace();
             }
         } catch(Exception ex){
             ex.printStackTrace();
