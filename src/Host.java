@@ -66,8 +66,8 @@ public class Host extends MainWindow
 			oos = new ObjectOutputStream(s.getOutputStream());
 			ois = new ObjectInputStream(s.getInputStream());
 
-            Client c = new Client();
-			oos.writeObject(String.format("%s,%s,%s,%s", c.cpu, c.ram, c.os, c.version ));
+			Client c = new Client();
+			oos.writeObject(String.format("%s,%s,%s,%s,%s", c.cpu, c.ram, c.os, c.version, c.ip));
 			this.btn_enviar.setEnabled(false);
 		}
 		catch (Exception ex)

@@ -86,7 +86,7 @@ public class Server extends MainWindow
 				if (this.pc < this.labels.size()) {
 					String ip = "" + s.getInetAddress();
 					String[] respuesta = nom.split(",");
-					this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3]));
+					this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
 					this.orderClients();
 					this.setLabelsText(this.clients);
 					System.out.println(this.labels);

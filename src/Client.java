@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
@@ -25,23 +26,26 @@ public class Client {
 	public String ram;
 	public String os;
 	public String version;
+	public String ip;
 
-    public Client(){
-        this.cpu = getCpu();
-        this.ram = getAllocatedRam();
-        this.os = getOS();
-        this.version = getVersion();
-    }
+	public Client(){
+		this.cpu = getCpu();
+		this.ram = getAllocatedRam();
+		this.os = getOS();
+		this.version = getVersion();
+		this.ip = getIp();
+	}
 
-	public Client(String cpu, String ram, String os, String version) {
+	public Client(String cpu, String ram, String os, String version, String ip) {
 		this.cpu = cpu;
 		this.ram = ram;
 		this.os = os;
 		this.version = version;
+		this.ip = ip;
 	}
 
 	public String labelText() {
-		return String.format("%s %s %s %s", cpu, ram, os, version);
+		return String.format("%s %s %s %s %s", cpu, ram, os, version, ip);
 	}
 
 	public double getRam() {
@@ -52,7 +56,7 @@ public class Client {
 		return Double.parseDouble(cpu.substring(0, cpu.length() - 3));
 	}
 
-    public String getOS()
+	public String getOS()
 	{
 		return System.getProperty("os.name").toLowerCase();
 	}
@@ -61,6 +65,7 @@ public class Client {
 	{
 		return System.getProperty("os.version");
 	}
+
 	public long getTotalRam()
 	{
 		long ram = 0;
@@ -80,6 +85,7 @@ public class Client {
 		}// for
 		return ram;
 	}
+
 	public long getFreeRam()
 	{
 		long ram = 0;
@@ -99,10 +105,12 @@ public class Client {
 		}// for
 		return ram;
 	}
+
 	public String getAllocatedRam()
 	{
 		return this.humanReadableByteCount(getTotalRam() - getFreeRam(), true);
 	}
+
 	public String getCpu()
 	{
 		Double cpu_load = 0.0;
@@ -124,6 +132,17 @@ public class Client {
 		return result;
 	}
 
+	public String getIp() {
+		String ip = "";
+		try {
+			ServerSocket ss = new ServerSocket(5401);
+			ip = "" + ss.getInetAddress();
+			ss.close();
+		} catch(Exception e) {
+			
+		}
+		return ip;
+	}
 	private static void printUsage() {
 		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
 		for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
