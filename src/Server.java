@@ -143,6 +143,9 @@ public class Server extends MainWindow implements Runnable
     public void sendIPs(String message){
         for(int i=0; i < this.clients.size(); i++){
             try{
+            	if (message.equals(this.oClient.ip)) {
+            		continue;
+            	}
                 RequestServer(clients.get(i).ip, message);
             } catch(Exception ex){
                 ex.printStackTrace();
