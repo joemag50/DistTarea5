@@ -89,12 +89,12 @@ public class Server extends MainWindow implements Runnable
                     oos = new ObjectOutputStream( s.getOutputStream() );
                     // leo el nombre que envia el cliente
                     String nom = (String)ois.readObject();
-                    if (this.pc < this.labels.size() - 1) {
+                    this.orderClients();
+                    this.setLabelsText(this.clients);
+                    if (this.pc < this.labels.size() - 2) {
                         String ip = "" + s.getInetAddress();
                         String[] respuesta = nom.split(",");
                         this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
-                        this.orderClients();
-                        this.setLabelsText(this.clients);
                         System.out.println(this.labels);
                         //server.labels.get(server.pc).setText(
                         //	String.format("%s %s %s %s", respuesta[0], respuesta[1], respuesta[2], respuesta[3])
@@ -104,7 +104,7 @@ public class Server extends MainWindow implements Runnable
                     }
                     else if(!this.clients.get(0).ip.equals(this.oClient.ip)) {
                         System.out.println("Aber tus pies");
-                        oos.writeObject(this.clients.get(0).ip);
+                        sendIPs(this.clients.get(0).ip);
                         this.run_me = false;
                         System.out.println("Truena 3");
                         break;
@@ -138,5 +138,44 @@ public class Server extends MainWindow implements Runnable
 
 	public void orderClients() {
 		clients.sort(comparing(Client::getCpuDouble).thenComparing(Client::getRam));
+	}
+
+    public void sendIPs(String message){
+        for(int i=0; i < this.clients.size(); i++){
+            try{
+                RequestServer(clients.get(i).ip, message);
+            } catch(Exception ex){
+                ex.printStackTrace();
+            }
+
+        }
+    }
+
+	public void RequestServer (String ip, String message) throws IOException
+	{
+		// TODO Auto-generated method stub
+		ObjectOutputStream oos = null;
+		ObjectInputStream ois = null;
+		Socket s = null;
+
+		try
+		{
+			s = new Socket(ip ,5400);
+			oos = new ObjectOutputStream(s.getOutputStream());
+			ois = new ObjectInputStream(s.getInputStream());
+
+			oos.writeObject(message);
+			//this.btn_enviar.setEnabled(false);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			if( ois != null ) ois.close();
+			if( oos != null ) oos.close();
+			if( s != null ) s.close();
+		}
 	}
 }
