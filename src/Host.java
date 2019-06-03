@@ -32,6 +32,7 @@ public class Host extends MainWindow implements Runnable
 
 	Host()
 	{
+		MyLabel l_puerto = new MyLabel("Puerto: " + puerto);
 		MyLabel l_ip = new MyLabel("IP Servidor:");
 		txt_ip = new JTextField(50);
 		txt_ip.requestFocusInWindow();
@@ -43,13 +44,14 @@ public class Host extends MainWindow implements Runnable
 		btn_enviar.addActionListener(this);
 
 		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
+		loginBox.add(l_puerto);
 		loginBox.add(l_ip);
 		loginBox.add(txt_ip);
 		loginBox.add(l_titulo);
 		loginBox.add(btn_enviar);
 
 
-		int x = 70,y = 70, b = 700,h = 100;
+		int x = 70,y = 70, b = 700,h = 130;
 		loginBox.setBounds(x, y, b, h);
 		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
@@ -110,6 +112,9 @@ public class Host extends MainWindow implements Runnable
 					String myIP = c.ip;
 					if ( myIP.equals(message) ) {
 						this.run_me = false;
+						this.puerto++;
+					} else {
+						this.puerto++;
 					}
 				}
 				catch (Exception ex)
@@ -135,17 +140,6 @@ public class Host extends MainWindow implements Runnable
                 t1.start();
             } catch(Exception ex){
                 ex.printStackTrace();
-            }
-        } catch(BindException ex){
-			Server server = new Server();
-			server.finGUI();
-			this.dispose();
-            try{
-                server.run_me = true;
-                Thread t1 = new Thread(server);
-                t1.start();
-            } catch(Exception ex1){
-                ex1.printStackTrace();
             }
 		} catch (Exception ex) {
 			ex.printStackTrace();
