@@ -103,7 +103,10 @@ public class Host extends MainWindow
 				oos = new ObjectOutputStream( s.getOutputStream() );
 				// leo el nombre que envia el cliente
 				String message = (String)ois.readObject();
-				
+				String myIP = ss.getInetAddress() + "";
+				if ( myIP.equals(message) ) {
+					this.run_me = false;
+				}
 			}
 			catch (Exception ex)
 			{
@@ -115,6 +118,10 @@ public class Host extends MainWindow
 				System.out.println("Conexion cerrada!");
 			}
 		}
+		
+		Server server = new Server();
+		server.finGUI();
+		this.dispose();
 	}
 	
 	//JCGE: Este es el metodo que se encarga de tomar las acciones en los botones
