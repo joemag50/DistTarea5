@@ -18,8 +18,11 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Server extends MainWindow implements Runnable
+public class Server extends MainWindow
 {
+    ObjectInputStream ois = null;
+    ObjectOutputStream oos = null;
+
 	public MyLabel l_m1, l_m2, l_m3, l_m4, l_m5;
 	public int pc = 0;
 	public ArrayList<MyLabel> labels;
@@ -31,9 +34,11 @@ public class Server extends MainWindow implements Runnable
 
 	Server ()
 	{
+		this.oClient = new Client();
+
 		pc = 0;
 		labels = new ArrayList<MyLabel>();
-		MyLabel l_puerto = new MyLabel("Puerto: " + puerto);
+		MyLabel l_puerto = new MyLabel("Mi Ip: " + this.oClient.ip + ":" + puerto);
 
 		MyLabel l_titulo = new MyLabel("CPU | RAM | SO | Version SO | Ancho de banda | IP");
 		l_m1 = new MyLabel("-");
@@ -52,9 +57,7 @@ public class Server extends MainWindow implements Runnable
 		labels.add(l_m3);
 		labels.add(l_m4);
 		labels.add(l_m5);
-
-        this.oClient = new Client();
-
+		
 		clients = new ArrayList<Client>();
         clients.add(oClient);
         this.orderClients();
@@ -72,49 +75,38 @@ public class Server extends MainWindow implements Runnable
 		panelCentro.add(loginBox);
 	}
 
-	public void run () {
+	// Server Escuchando
+	public String run () {
 		this.finGUI();
+		String estado = Estados.server;
         try {
-            // TODO Auto-generated method stub
-            ObjectInputStream ois = null;
-            ObjectOutputStream oos = null;
-
             Socket s = null;
             ServerSocket ss = new ServerSocket(this.puerto);
-            while (this.run_me)
+            while (estado.equals(Estados.server))
             {
                 try
                 {
-                    // el ServerSocket me da el Socket
                     s = ss.accept();
-                    // informacion en la consola
-                    //System.out.println("Se conectaron desde la IP: " +s.getInetAddress());
-                    // enmascaro la entrada y salida de bytes
                     ois = new ObjectInputStream( s.getInputStream() );
                     oos = new ObjectOutputStream( s.getOutputStream() );
-                    // leo el nombre que envia el cliente
+
                     String nom = (String)ois.readObject();
-                    System.out.println("Entro al if");
                     String[] respuesta = nom.split(",");
+
                     this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
+                    
+                    // Puede ser apagado
+                    oos.writeObject(Estados.host);
+
                     if (this.pc < this.labels.size() - 2) {
                         this.orderClients();
                         this.setLabelsText(this.clients);
-                        //server.labels.get(server.pc).setText(
-                        //	String.format("%s %s %s %s", respuesta[0], respuesta[1], respuesta[2], respuesta[3])
-                        //);
                         this.pc++;
                     }
                     else if(!this.clients.get(0).ip.equals(this.oClient.ip)) {
-                    	System.out.println("Entro al else if");
-                        if( oos !=null ) oos.close();
-                        if( ois !=null ) ois.close();
-                        if( s != null ) s.close();
-                        sendIPs(this.clients.get(0).ip);
-                        this.run_me = false;
+                        estado = Estados.host;
                         break;
                     }
-                    //System.out.println(nom);
                 }
                 catch (Exception ex)
                 {
@@ -125,25 +117,12 @@ public class Server extends MainWindow implements Runnable
                     if( s != null ) s.close();
                 }
             }
-
-            if( oos !=null ) oos.close();
-            if( ois !=null ) ois.close();
-            if( s != null ) s.close();
-
-			Host h = new Host();
-			h.finGUI();
-			h.puerto++;
-			this.dispose();
-            try{
-                h.run_me = true;
-                Thread t1 = new Thread(h);
-                t1.start();
-            } catch(Exception ex){
-                ex.printStackTrace();
-            }
         } catch(Exception ex){
             ex.printStackTrace();
         }
+        
+        sendIPs(this.clients.get(0).ip);
+        return estado;
 	}
 
 	public void setLabelsText(ArrayList<Client> clients) {
@@ -154,28 +133,13 @@ public class Server extends MainWindow implements Runnable
 
 	public void orderClients() {
         Collections.sort(clients);
-        System.out.println("Se ordenaron");
-        System.out.println(clients);
 	}
 
     public void sendIPs(String message){
     	ArrayList<String> ipes = new ArrayList<String>();
 
         for(int i=0; i < this.clients.size(); i++){
-        	boolean b = clients.get(i).ip != this.oClient.ip && !searchArrayList(ipes, clients.get(i).ip);
-        	boolean bb = !searchArrayList(ipes, clients.get(i).ip);
-        	System.out.println();
-        	System.out.println(b);
-        	System.out.println();
-        	System.out.println(bb);
-            if (clients.get(i).ip != this.oClient.ip && !searchArrayList(ipes, clients.get(i).ip) ) {
-            	System.out.println();
-            	System.out.println(clients.get(i).ip);
-            	System.out.println();
-            	System.out.println(ipes);
-            	System.out.println();
-            	System.out.println(i);
-            	System.out.println();
+            if ( clients.get(i).ip != this.oClient.ip && !searchArrayList(ipes, clients.get(i).ip) ) {
             	ipes.add(clients.get(i).ip);
                 RequestServer(clients.get(i).ip, message);
             }
@@ -198,8 +162,6 @@ public class Server extends MainWindow implements Runnable
 	public void RequestServer (String ip, String message)
 	{
 		// TODO Auto-generated method stub
-		ObjectOutputStream oos = null;
-		ObjectInputStream ois = null;
 		Socket s = null;
 
 		try
@@ -209,7 +171,6 @@ public class Server extends MainWindow implements Runnable
 			ois = new ObjectInputStream(s.getInputStream());
 
 			oos.writeObject(message);
-			//this.btn_enviar.setEnabled(false);
 		}
 		catch (Exception ex)
 		{
