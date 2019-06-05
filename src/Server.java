@@ -72,6 +72,7 @@ public class Server extends MainWindow implements Runnable
 	}
 
 	public void run () {
+		this.finGUI();
         try {
             // TODO Auto-generated method stub
             ObjectInputStream ois = null;

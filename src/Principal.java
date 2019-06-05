@@ -58,7 +58,6 @@ public class Principal extends MainWindow
 		if (boton == "Host")
 		{
 			Host h = new Host();
-			h.finGUI();
 			this.dispose();
             try{
                 h.run_me = true;
@@ -73,7 +72,6 @@ public class Principal extends MainWindow
 		if (boton == "Server")
 		{
 			Server s = new Server();
-			s.finGUI();
 			this.dispose();
             try{
                 s.run_me = true;
