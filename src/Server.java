@@ -173,6 +173,7 @@ public class Server extends MainWindow implements Runnable
 
 	public void setLabelsText(ArrayList<Client> clients) {
 		for (int i = 0; i < clients.size(); i++) {
+			labels.get(i).setText("");
 			labels.get(i).setText(clients.get(i).labelText() + " 10 Mbps");
 		}
 	}
