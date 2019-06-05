@@ -10,10 +10,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Collections;
-import java.util.Comparable;
 import java.util.Enumeration;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -74,7 +72,7 @@ public class Client implements Comparable<Client>{
 	}
 
     public int compareTo(Client c){
-        return this.getCpuDouble();
+        return Double.compare(this.getCpuDouble(), c.getCpuDouble());
     }
 
 	public long getTotalRam()
