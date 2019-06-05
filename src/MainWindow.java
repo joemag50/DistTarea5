@@ -113,11 +113,13 @@ public class MainWindow extends JFrame implements ActionListener, MenuListener
 	public void finGUI()
 	{
 		//JCGE
+		System.out.println("FINGUI 1");
 		frame.add(panelSur,   BorderLayout.SOUTH);
 		frame.add(panelCentro, BorderLayout.CENTER);
 		this.setLocationRelativeTo(null);
 		pack();
 		this.setSize(900, 600);
+		System.out.println("FINGUI 2");
 	}
 
 	public void setWindowSize(MainWindow e, int x, int y)

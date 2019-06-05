@@ -9,16 +9,16 @@ public class Controller
     }
 
     public void start(){
-        while(true){
+        //while(true){
+            Handler h = new Handler(nextStatus);
+            Thread t = new Thread(h);
+            t.start();
             try {
-	            Handler h = new Handler(nextStatus);
-	            Thread t = new Thread(h);
-	            t.start();
 				t.join();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }
+        //}
     }
 }

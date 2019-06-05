@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-public class Host extends MainWindow
+public class Host extends MainWindow implements Runnable
 {
 	ObjectOutputStream oos = null;
 	ObjectInputStream ois = null;
@@ -46,6 +47,10 @@ public class Host extends MainWindow
 	
 	Host()
 	{
+
+	}
+	
+	public void CrearGUI() {
 		Client c = new Client();
 		MyLabel l_puerto = new MyLabel("Mi Ip: " + c.ip + ":" + puerto);
 		MyLabel l_ip = new MyLabel("IP Servidor:");
@@ -69,8 +74,20 @@ public class Host extends MainWindow
 		loginBox.setBounds(x, y, b, h);
 		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
+		
+		System.out.println("FINGUI 1");
+		frame.add(panelSur,   BorderLayout.SOUTH);
+		frame.add(panelCentro, BorderLayout.CENTER);
+		this.setLocationRelativeTo(null);
+		pack();
+		this.setSize(900, 600);
+		System.out.println("FINGUI 2");
 	}
-
+	public void serv() {
+		Runnable r = new Host();
+		new Thread(r).start();
+	}
+	
 	// Cuando host se comunica primero al server
 	public void RequestServer() throws IOException
 	{
@@ -105,9 +122,13 @@ public class Host extends MainWindow
 		}
 	}
 	
+	public void run() {
+		this.CrearGUI();
+		this.runs();
+	}
+	
 	// Cuando host escucha
-	public String run () {
-		this.finGUI();
+	public String runs () {
 		String estado = Estados.host;
 		try {
 			Socket s = null;

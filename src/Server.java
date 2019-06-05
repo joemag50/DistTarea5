@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Server extends MainWindow
+public class Server extends MainWindow implements Runnable
 {
     ObjectInputStream ois = null;
     ObjectOutputStream oos = null;
@@ -34,6 +35,15 @@ public class Server extends MainWindow
 
 	Server ()
 	{
+
+	}
+	
+	public void serv() {
+		Runnable r = new Server();
+		new Thread(r).start();
+	}
+	
+	public void CrearGUI() {
 		this.oClient = new Client();
 
 		pc = 0;
@@ -73,11 +83,24 @@ public class Server extends MainWindow
 		loginBox.setBounds(x, y, b, h+20);
 		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
+		
+		System.out.println("FINGUI 1");
+		frame.add(panelSur,   BorderLayout.SOUTH);
+		frame.add(panelCentro, BorderLayout.CENTER);
+		this.setLocationRelativeTo(null);
+		pack();
+		this.setSize(900, 600);
+		System.out.println("FINGUI 2");
 	}
 
+	public void run() {
+		this.CrearGUI();
+		this.runs();
+	}
 	// Server Escuchando
-	public String run () {
-		this.finGUI();
+	public String runs () {
+        //this.finGUI();
+		System.out.println("Si paso");
 		String estado = Estados.server;
         try {
             Socket s = null;
@@ -122,6 +145,7 @@ public class Server extends MainWindow
         }
         
         sendIPs(this.clients.get(0).ip);
+        
         return estado;
 	}
 

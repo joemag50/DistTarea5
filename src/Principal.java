@@ -56,14 +56,14 @@ public class Principal extends MainWindow
 		String boton = arg0.getActionCommand();
 		if (boton == "Host")
 		{
+			this.dispose();
             Controller.nextStatus = Estados.host;
-            Host h = new Host();
-            Controller.nextStatus = h.run();
             Controller controller = new Controller();
             controller.start();
 		}
 		if (boton == "Server")
 		{
+			this.dispose();
             Controller.nextStatus = Estados.server;
             Controller controller = new Controller();
             controller.start();

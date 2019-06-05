@@ -9,12 +9,13 @@ public class Handler extends Thread
     public void run(){
         switch(status){
             case Estados.host:
-                Host h = new Host(Controller.currentServer);
-                Controller.nextStatus = h.run();
+                Host h = new Host();
+                h.serv();
                 break;
             case Estados.server:
                 Server s = new Server();
-                Controller.nextStatus = s.run();
+                s.serv();
+                System.out.println("adios mundo!");
                 break;
             case Estados.apagar:
                 System.exit(0);
