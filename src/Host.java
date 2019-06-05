@@ -17,6 +17,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import org.json.JSONObject;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
@@ -24,141 +27,75 @@ import java.lang.reflect.Modifier;
 
 public class Host extends MainWindow implements Runnable
 {
-	JTextField txt_ip;
 	JButton btn_enviar;
-
+	MyLabel l_ip;
+	MyLabel l_puerto;
+	MyLabel l_datos;
+	
 	public boolean run_me = false;
 	public int puerto = 5400;
+	
+	public void CreateGUI() {
+		MyLabel l_titulo = new MyLabel("Proyecto");
+		
+		l_ip = new MyLabel("IP Servidor: ");
+		l_puerto = new MyLabel("Puerto: " + puerto);
+		l_datos = new MyLabel("Datos: ");
 
-	Host()
-	{
-		MyLabel l_puerto = new MyLabel("Puerto: " + puerto);
-		MyLabel l_ip = new MyLabel("IP Servidor:");
-		txt_ip = new JTextField(50);
-		txt_ip.requestFocusInWindow();
-
-		MyLabel l_titulo = new MyLabel("¿Enviar datos?");
-		btn_enviar = new JButton("Enviar");
 		JPanel loginBox = new JPanel();
 
-		btn_enviar.addActionListener(this);
-
 		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
-		loginBox.add(l_puerto);
-		loginBox.add(l_ip);
-		loginBox.add(txt_ip);
 		loginBox.add(l_titulo);
-		loginBox.add(btn_enviar);
-
+		loginBox.add(l_ip);
+		loginBox.add(l_puerto);
+		loginBox.add(l_datos);
 
 		int x = 70,y = 70, b = 700,h = 130;
 		loginBox.setBounds(x, y, b, h);
 		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
+		this.finGUI();
 	}
 
-	public void RequestServer () throws IOException
+	public void Hos ()
 	{
-		// TODO Auto-generated method stub
-		ObjectOutputStream oos = null;
-		ObjectInputStream ois = null;
-		Socket s = null;
-
-		try
-		{
-			s = new Socket(this.txt_ip.getText(), this.puerto);
-			oos = new ObjectOutputStream(s.getOutputStream());
-			ois = new ObjectInputStream(s.getInputStream());
-
-			Client c = new Client();
-			oos.writeObject(String.format("%s,%s,%s,%s,%s", c.cpu, c.ram, c.os, c.version, c.ip));
-			//this.btn_enviar.setEnabled(false);
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(null,"Error: No hubo conexion, ¿Esta encendido el servidor?");
-		}
-		finally
-		{
-			if( ois != null ) ois.close();
-			if( oos != null ) oos.close();
-			if( s != null ) s.close();
-		}
+		Runnable r = new Host();
+		new Thread(r).start();
 	}
 	
 	public void run () {
-		try {
-			// TODO Auto-generated method stub
-			ObjectInputStream ois = null;
-			ObjectOutputStream oos = null;
-	
-			Socket s = null;
-			ServerSocket ss = new ServerSocket(this.puerto);
-			while (this.run_me)
-			{
-				try
-				{
-					// el ServerSocket me da el Socket
-					s = ss.accept();
-					// informacion en la consola
-					//System.out.println("Se conectaron desde la IP: " +s.getInetAddress());
-					// enmascaro la entrada y salida de bytes
-					ois = new ObjectInputStream( s.getInputStream() );
-					oos = new ObjectOutputStream( s.getOutputStream() );
-					// leo el nombre que envia el cliente
-					String message = (String)ois.readObject();
-                    Client c = new Client();
-					String myIP = c.ip;
-					if ( myIP.equals(message) ) {
-						this.run_me = false;
-						this.puerto++;
-					} else {
-						this.puerto++;
-					}
-				}
-				catch (Exception ex)
-				{
-					ex.printStackTrace();
-				} finally {
-					if( oos !=null ) oos.close();
-					if( ois !=null ) ois.close();
-					if( s != null ) s.close();
-				}
-			}
-			
-            if( oos !=null ) oos.close();
-            if( ois !=null ) ois.close();
-            if( s != null ) s.close();
-
-			Server server = new Server();
-			server.finGUI();
-			server.puerto++;
-			this.dispose();
-            try{
-                server.run_me = true;
-                Thread t1 = new Thread(server);
-                t1.start();
-            } catch(Exception ex){
-                ex.printStackTrace();
-            }
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		CreateGUI();
+		Hosting();
+		this.dispose();
 	}
 	
-	//JCGE: Este es el metodo que se encarga de tomar las acciones en los botones
-	public void actionPerformed(ActionEvent arg0)
-	{
-		String boton = arg0.getActionCommand();
-		if (boton == "Enviar")
-		{
+	public void Hosting() {
+		while (true) {
 			try {
-				this.RequestServer();
-			} catch (IOException e) {
+				Client c = new Client();
+				String url = String.format("https://api-distribuidos.herokuapp.com/update/?ip=%s&cpu=%s&ram=%s", c.ip, c.cpu.replace("%",  ""), c.ram.replace(" ", ""));
+				System.out.println(url);
+				String shiet = Connection.Connect(url);
+				System.out.println(shiet);
+				
+				JSONObject obj = new JSONObject(shiet);
+				if (obj.getBoolean("server")) {
+					break;
+				}
+				l_ip.setText(shiet);
+				l_datos.setText(String.format("%s %s %s %s %s", c.os, c.version, c.ip, c.cpu, c.ram));
+				
+				Thread.sleep(3000);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 
+	//JCGE: Este es el metodo que se encarga de tomar las acciones en los botones
+	public void actionPerformed(ActionEvent arg0)
+	{
+		String boton = arg0.getActionCommand();
+	}
 }

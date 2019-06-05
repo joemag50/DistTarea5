@@ -16,10 +16,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import org.json.JSONArray; 
+import org.json.JSONObject;
 
 public class Server extends MainWindow implements Runnable
 {
 	public MyLabel l_m1, l_m2, l_m3, l_m4, l_m5;
+	public MyLabel l_m6, l_m7, l_m8, l_m9, l_m10;
+	public MyLabel l_m11, l_m12, l_m13, l_m14, l_m15;
+
 	public int pc = 0;
 	public ArrayList<MyLabel> labels;
 	public ArrayList<Client> clients;
@@ -27,22 +32,40 @@ public class Server extends MainWindow implements Runnable
 
 	public boolean run_me = false;
 	public int puerto = 5400;
+	public MyLabel l_puerto;
+	public MyLabel l_quiensoy;
 
-	Server ()
+	public void CreateGUI ()
 	{
 		pc = 0;
 		labels = new ArrayList<MyLabel>();
-		MyLabel l_puerto = new MyLabel("Puerto: " + puerto);
+        this.oClient = new Client();
+        l_quiensoy = new MyLabel("");
+
+        l_puerto = new MyLabel("IP : " + this.oClient.ip);
 
 		MyLabel l_titulo = new MyLabel("CPU | RAM | SO | Version SO | Ancho de banda | IP");
-		l_m1 = new MyLabel("-");
-		l_m2 = new MyLabel("-");
-		l_m3 = new MyLabel("-");
-		l_m4 = new MyLabel("-");
-		l_m5 = new MyLabel("-");
+		l_m1 = new MyLabel("");
+		l_m2 = new MyLabel("");
+		l_m3 = new MyLabel("");
+		l_m4 = new MyLabel("");
+		l_m5 = new MyLabel("");
+
+		l_m6 = new MyLabel("");
+		l_m7 = new MyLabel("");
+		l_m8 = new MyLabel("");
+		l_m9 = new MyLabel("");
+		l_m10 = new MyLabel("");
+
+		l_m11 = new MyLabel("");
+		l_m12 = new MyLabel("");
+		l_m13 = new MyLabel("");
+		l_m14 = new MyLabel("");
+		l_m15 = new MyLabel("");
 		JPanel loginBox = new JPanel();
 
 		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
+		loginBox.add(l_quiensoy);
 		loginBox.add(l_puerto);
 		loginBox.add(l_titulo);
 
@@ -51,97 +74,97 @@ public class Server extends MainWindow implements Runnable
 		labels.add(l_m3);
 		labels.add(l_m4);
 		labels.add(l_m5);
+		
+		labels.add(l_m6);
+		labels.add(l_m7);
+		labels.add(l_m8);
+		labels.add(l_m9);
+		labels.add(l_m10);
+		
+		labels.add(l_m11);
+		labels.add(l_m12);
+		labels.add(l_m13);
+		labels.add(l_m14);
+		labels.add(l_m15);
 
-        this.oClient = new Client();
 
 		clients = new ArrayList<Client>();
         clients.add(oClient);
-        this.orderClients();
-        this.setLabelsText(this.clients);
 
 		loginBox.add(l_m1);
 		loginBox.add(l_m2);
 		loginBox.add(l_m3);
 		loginBox.add(l_m4);
 		loginBox.add(l_m5);
+		
+		loginBox.add(l_m6);
+		loginBox.add(l_m7);
+		loginBox.add(l_m8);
+		loginBox.add(l_m9);
+		loginBox.add(l_m10);
+		
+		loginBox.add(l_m11);
+		loginBox.add(l_m12);
+		loginBox.add(l_m13);
+		loginBox.add(l_m14);
+		loginBox.add(l_m15);
 
 		int x = 70,y = 70, b = 700,h = 300;
 		loginBox.setBounds(x, y, b, h+20);
 		loginBox.setBackground(colores.get(0));
 		panelCentro.add(loginBox);
+		
+		this.finGUI();
 	}
-
+	
+	public static void Serv ()
+	{
+		Runnable r = new Server();
+		new Thread(r).start();
+	}
+	
 	public void run () {
-        try {
-            // TODO Auto-generated method stub
-            ObjectInputStream ois = null;
-            ObjectOutputStream oos = null;
+		CreateGUI();
+		Serving();
+		this.dispose();
+	}
+	
+	public void Serving() {
+		while (true) {
+			try {
+				Client c = new Client();
+				String url = String.format("https://api-distribuidos.herokuapp.com/update/?ip=%s&cpu=%s&ram=%s", c.ip, c.cpu.replace("%",  ""), c.ram.replace(" ", ""));
+				System.out.println(url);
+				String shiet = Connection.Connect(url);
+				System.out.println(shiet);
+				
+				JSONObject obj = new JSONObject(shiet);
+				if (obj.getBoolean("server")) {
+					l_quiensoy.setText("SERVIDOR");
+				} else {
+					l_quiensoy.setText("HOST");
+				}
+				
+				JSONArray ary = obj.getJSONArray("clients");
 
-            Socket s = null;
-            ServerSocket ss = new ServerSocket(this.puerto);
-            while (this.run_me)
-            {
-                try
-                {
-                    // el ServerSocket me da el Socket
-                    s = ss.accept();
-                    // informacion en la consola
-                    //System.out.println("Se conectaron desde la IP: " +s.getInetAddress());
-                    // enmascaro la entrada y salida de bytes
-                    ois = new ObjectInputStream( s.getInputStream() );
-                    oos = new ObjectOutputStream( s.getOutputStream() );
-                    // leo el nombre que envia el cliente
-                    String nom = (String)ois.readObject();
-                    System.out.println("Entro al if");
-                    String[] respuesta = nom.split(",");
-                    this.clients.add(new Client(respuesta[0], respuesta[1], respuesta[2], respuesta[3], respuesta[4]));
-                    if (this.pc < this.labels.size() - 2) {
-                        this.orderClients();
-                        this.setLabelsText(this.clients);
-                        //server.labels.get(server.pc).setText(
-                        //	String.format("%s %s %s %s", respuesta[0], respuesta[1], respuesta[2], respuesta[3])
-                        //);
-                        this.pc++;
-                    }
-                    else if(!this.clients.get(0).ip.equals(this.oClient.ip)) {
-                    	System.out.println("Entro al else if");
-                        if( oos !=null ) oos.close();
-                        if( ois !=null ) ois.close();
-                        if( s != null ) s.close();
-                        sendIPs(this.clients.get(0).ip);
-                        this.run_me = false;
-                        break;
-                    }
-                    //System.out.println(nom);
-                }
-                catch (Exception ex)
-                {
-                    ex.printStackTrace();
-                } finally {
-                    if( oos !=null ) oos.close();
-                    if( ois !=null ) ois.close();
-                    if( s != null ) s.close();
-                }
-            }
-            
-            if( oos !=null ) oos.close();
-            if( ois !=null ) ois.close();
-            if( s != null ) s.close();
-            
-			Host h = new Host();
-			h.finGUI();
-			h.puerto++;
-			this.dispose();
-            try{
-                h.run_me = true;
-                Thread t1 = new Thread(h);
-                t1.start();
-            } catch(Exception ex){
-                ex.printStackTrace();
-            }
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
+				for (int i = 0; i < ary.length(); i++) {
+					JSONObject jo = new JSONObject(ary.get(i).toString());
+
+					this.clients.get(i).ip = jo.getString("ip");
+					this.clients.get(i).ram = jo.getString("ram");
+					this.clients.get(i).cpu = jo.getString("cpu");
+					this.clients.get(i).os = "";
+					this.clients.get(i).version = "";
+				}
+				//Rellenar datos
+		        this.setLabelsText(this.clients);
+
+				Thread.sleep(3000);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void setLabelsText(ArrayList<Client> clients) {
