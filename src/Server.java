@@ -154,6 +154,8 @@ public class Server extends MainWindow implements Runnable
 
 	public void orderClients() {
         Collections.sort(clients);
+        System.out.println("Se ordenaron");
+        System.out.println(clients);
 	}
 
     public void sendIPs(String message){
