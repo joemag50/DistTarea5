@@ -146,7 +146,10 @@ public class Server extends MainWindow implements Runnable
 				}
 				
 				JSONArray ary = obj.getJSONArray("clients");
-				
+		        
+		        for (MyLabel ml : this.labels) {
+		        	ml.setText("");
+		        }
 				this.clients = new ArrayList<Client>();
 				
 				for (int i = 0; i < ary.length(); i++) {
@@ -160,7 +163,7 @@ public class Server extends MainWindow implements Runnable
 				//Rellenar datos
 		        this.setLabelsText(this.clients);
 
-				Thread.sleep(3000);
+				Thread.sleep(1000);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
