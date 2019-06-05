@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Collections;
+import java.util.Comparable;
 import java.util.Enumeration;
 import java.util.Random;
 
@@ -27,7 +28,7 @@ import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-public class Client {
+public class Client implements Comparable<Client>{
 	public String cpu;
 	public String ram;
 	public String os;
@@ -71,6 +72,10 @@ public class Client {
 	{
 		return System.getProperty("os.version");
 	}
+
+    public int compareTo(Client c){
+        return this.getCpuDouble();
+    }
 
 	public long getTotalRam()
 	{
@@ -137,7 +142,7 @@ public class Client {
 
 	public String getIp() {
 		String ip = "";
-		
+
         Enumeration<NetworkInterface> nets;
 		try {
 			nets = NetworkInterface.getNetworkInterfaces();
@@ -153,7 +158,7 @@ public class Client {
 	            }
 
 	        }
-	        
+
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -167,7 +172,7 @@ public class Client {
         for (InetAddress inetAddress : Collections.list(inetAddresses)) {
         }
      }
-    
+
 	private static void printUsage() {
 		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
 		for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {

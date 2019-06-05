@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
+import java.util.Collection;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -124,11 +125,11 @@ public class Server extends MainWindow implements Runnable
                     if( s != null ) s.close();
                 }
             }
-            
+
             if( oos !=null ) oos.close();
             if( ois !=null ) ois.close();
             if( s != null ) s.close();
-            
+
 			Host h = new Host();
 			h.finGUI();
 			h.puerto++;
@@ -152,12 +153,12 @@ public class Server extends MainWindow implements Runnable
 	}
 
 	public void orderClients() {
-		clients.sort(comparing(Client::getCpuDouble).thenComparing(Client::getRam));
+        Collections.sort(clients);
 	}
 
     public void sendIPs(String message){
     	ArrayList<String> ipes = new ArrayList<String>();
-    	
+
         for(int i=0; i < this.clients.size(); i++){
         	boolean b = clients.get(i).ip != this.oClient.ip && !searchArrayList(ipes, clients.get(i).ip);
         	boolean bb = !searchArrayList(ipes, clients.get(i).ip);
@@ -178,7 +179,7 @@ public class Server extends MainWindow implements Runnable
             }
         }
     }
-    
+
     public boolean searchArrayList(ArrayList<String> array, String texto)
     {
     	boolean encontrado = false;
