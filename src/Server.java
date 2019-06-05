@@ -6,7 +6,6 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import static java.util.Comparator.comparing;
 import java.util.Collection;
 
 import javax.imageio.ImageIO;
