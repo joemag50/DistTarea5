@@ -57,30 +57,15 @@ public class Principal extends MainWindow
 		String boton = arg0.getActionCommand();
 		if (boton == "Host")
 		{
-			Host h = new Host();
-			this.dispose();
-            try{
-                h.run_me = true;
-                Thread t1 = new Thread(h);
-                t1.start();
-            } catch(Exception ex){
-                ex.printStackTrace();
-            }
-			return;
+            Controller.nextStatus = "Host";
+            Controller controller = new Controller();
+            controller.start();
 		}
-
 		if (boton == "Server")
 		{
-			Server s = new Server();
-			this.dispose();
-            try{
-                s.run_me = true;
-                Thread t1 = new Thread(s);
-                t1.start();
-            } catch(Exception ex){
-                ex.printStackTrace();
-            }
-			return;
+            Controller.nextStatus = "Server";
+            Controller controller = new Controller();
+            controller.start();
 		}
 	}
 }
