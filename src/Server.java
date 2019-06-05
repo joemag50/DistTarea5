@@ -133,7 +133,7 @@ public class Server extends MainWindow implements Runnable
 		while (true) {
 			try {
 				Client c = new Client();
-				String url = String.format("https://api-distribuidos.herokuapp.com/update/?ip=%s&cpu=%s&ram=%s", c.ip, c.cpu.replace("%",  ""), c.ram.replace(" ", ""));
+				String url = String.format("https://api-distribuidos.herokuapp.com/update/?ip=%s&cpu=%s&ram=%s&os=%s&version=%s", c.ip, c.cpu.replace("%",  ""), c.ram.replace(" ", ""), c.os.replace(" ", "_"), c.version.replace(" ", "_"));
 				System.out.println(url);
 				String shiet = Connection.Connect(url);
 				System.out.println(shiet);
@@ -146,15 +146,16 @@ public class Server extends MainWindow implements Runnable
 				}
 				
 				JSONArray ary = obj.getJSONArray("clients");
-
+				
+				this.clients = new ArrayList<Client>();
+				
 				for (int i = 0; i < ary.length(); i++) {
 					JSONObject jo = new JSONObject(ary.get(i).toString());
+					//String cpu, String ram, String os, String version, String ip) {
 
-					this.clients.get(i).ip = jo.getString("ip");
-					this.clients.get(i).ram = jo.getString("ram");
-					this.clients.get(i).cpu = jo.getString("cpu");
-					this.clients.get(i).os = "";
-					this.clients.get(i).version = "";
+					this.clients.add(new Client(jo.getString("cpu"), jo.getString("ram"),
+							jo.getString("os"), jo.getString("version"), 
+							jo.getString("ip")));
 				}
 				//Rellenar datos
 		        this.setLabelsText(this.clients);
