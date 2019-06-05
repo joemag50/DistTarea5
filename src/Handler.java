@@ -8,15 +8,15 @@ public class Handler extends Thread
 
     public void run(){
         switch(status){
-            case "Host":
+            case Estados.host:
                 Host h = new Host(Controller.currentServer);
                 Controller.nextStatus = h.run();
                 break;
-            case "Server":
+            case Estados.server:
                 Server s = new Server();
                 Controller.nextStatus = s.run();
                 break;
-            case "Off":
+            case Estados.apagar:
                 System.exit(0);
                 break;
         }

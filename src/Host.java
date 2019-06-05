@@ -89,9 +89,7 @@ public class Host extends MainWindow
 				
 				estado = (String)ois.readObject();
 				
-				if (estado.equals(Estados.apagar)) {
-					System.exit(0);
-				}
+				//Aqui debe ir logica para cerrar
 			}
 			catch (Exception ex)
 			{
@@ -122,10 +120,14 @@ public class Host extends MainWindow
 					ois = new ObjectInputStream( s.getInputStream() );
 					oos = new ObjectOutputStream( s.getOutputStream() );
 					
-					String ip = (String)ois.readObject();
+					String mensaje = (String)ois.readObject();
 					
 					Client c = new Client();
-					if ( c.ip.equals(ip) ) {
+					
+					Controller.currentServer = mensaje;
+					estado = Estados.host;
+					
+					if ( c.ip.equals(mensaje) ) {
 						estado = Estados.server;
 					}
 				}

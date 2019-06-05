@@ -1,6 +1,6 @@
 
 public class Estados {
-	public static String host = "host";
-	public static String server = "server";
-	public static String apagar = "apagar";
+	public final static String host = "host";
+	public final static String server = "server";
+	public final static String apagar = "apagar";
 }

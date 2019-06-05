@@ -47,7 +47,6 @@ public class Principal extends MainWindow
 	}
 
 	public static void main(String[] args) {
-
 		Principal p = new Principal();
 		p.finGUI();
 	}
@@ -57,13 +56,15 @@ public class Principal extends MainWindow
 		String boton = arg0.getActionCommand();
 		if (boton == "Host")
 		{
-            Controller.nextStatus = "Host";
+            Controller.nextStatus = Estados.host;
+            Host h = new Host();
+            Controller.nextStatus = h.run();
             Controller controller = new Controller();
             controller.start();
 		}
 		if (boton == "Server")
 		{
-            Controller.nextStatus = "Server";
+            Controller.nextStatus = Estados.server;
             Controller controller = new Controller();
             controller.start();
 		}
