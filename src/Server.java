@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import static java.util.Comparator.comparing;
 
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -62,6 +63,8 @@ public class Server extends MainWindow implements Runnable
 		l_m13 = new JButton("");
 		l_m14 = new JButton("");
 		l_m15 = new JButton("");
+		
+
 		JPanel loginBox = new JPanel();
 
 		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
@@ -89,6 +92,7 @@ public class Server extends MainWindow implements Runnable
 			jb.setVisible(false);
 			jb.setBackground(this.colores.get(3));
 			jb.setForeground(this.colores.get(2));
+			jb.addActionListener(this);
 		}
 
 		clients = new ArrayList<Client>();
@@ -128,8 +132,21 @@ public class Server extends MainWindow implements Runnable
 	
 	public void run () {
 		CreateGUI();
+		Activate();
 		Serving();
 		this.dispose();
+	}
+	
+	public void Activate() {
+		Client c = new Client();
+		String url = String.format("https://api-distribuidos.herokuapp.com/activate/?ip=%s", c.ip);
+		System.out.println(url);
+		try {
+			String shiet = Connection.Connect(url);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void Serving() {
@@ -162,6 +179,10 @@ public class Server extends MainWindow implements Runnable
 					this.clients.add(new Client(jo.getString("cpu"), jo.getString("ram"),
 							jo.getString("os"), jo.getString("version"), 
 							jo.getString("ip")));
+					
+					if (!jo.getBoolean("active")) {
+						System.exit(0);
+					}
 				}
 				//Rellenar datos
 				this.setLabelsText(this.clients);
@@ -183,6 +204,21 @@ public class Server extends MainWindow implements Runnable
 				labels.get(i).setVisible(false);
 			}
 			labels.get(i).setText(clients.get(i).labelText());
+		}
+	}
+
+	public void actionPerformed(ActionEvent arg0)
+	{
+		String boton = arg0.getActionCommand();
+		// deactivate
+		String[] datos = boton.split(" -");
+		System.out.println(datos[0]);
+		String url = String.format("https://api-distribuidos.herokuapp.com/deactivate/?ip=%s", datos[0]);
+		try {
+			String shiet = Connection.Connect(url);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

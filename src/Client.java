@@ -51,7 +51,7 @@ public class Client {
 	}
 
 	public String labelText() {
-		return String.format("%s - %s - %s - %s - %s - 3 Mbps", os, version, cpu, ram, ip);
+		return String.format("%s - %s - %s - %s - %s - 3 Mbps", ip, os, version, cpu, ram);
 	}
 
 	public double getRam() {
