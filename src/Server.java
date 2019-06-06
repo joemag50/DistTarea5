@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
 
+import java.awt.GraphicsEnvironment;
+
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -21,54 +23,50 @@ import org.json.JSONObject;
 
 public class Server extends MainWindow implements Runnable
 {
-	public MyLabel l_m1, l_m2, l_m3, l_m4, l_m5;
-	public MyLabel l_m6, l_m7, l_m8, l_m9, l_m10;
-	public MyLabel l_m11, l_m12, l_m13, l_m14, l_m15;
+	public JButton l_m1, l_m2, l_m3, l_m4, l_m5;
+	public JButton l_m6, l_m7, l_m8, l_m9, l_m10;
+	public JButton l_m11, l_m12, l_m13, l_m14, l_m15;
 
 	public int pc = 0;
-	public ArrayList<MyLabel> labels;
+	public ArrayList<JButton> labels;
 	public ArrayList<Client> clients;
-    public Client oClient;
+	public Client oClient;
 
 	public boolean run_me = false;
-	public int puerto = 5400;
 	public MyLabel l_puerto;
 	public MyLabel l_quiensoy;
 
 	public void CreateGUI ()
 	{
 		pc = 0;
-		labels = new ArrayList<MyLabel>();
-        this.oClient = new Client();
-        l_quiensoy = new MyLabel("");
+		labels = new ArrayList<JButton>();
+		this.oClient = new Client();
+		l_quiensoy = new MyLabel("");
 
-        l_puerto = new MyLabel("IP : " + this.oClient.ip);
+		l_puerto = new MyLabel("IP : " + this.oClient.ip);
 
-		MyLabel l_titulo = new MyLabel("CPU | RAM | SO | Version SO | Ancho de banda | IP");
-		l_m1 = new MyLabel("");
-		l_m2 = new MyLabel("");
-		l_m3 = new MyLabel("");
-		l_m4 = new MyLabel("");
-		l_m5 = new MyLabel("");
+		l_m1 = new JButton("");
+		l_m2 = new JButton("");
+		l_m3 = new JButton("");
+		l_m4 = new JButton("");
+		l_m5 = new JButton("");
 
-		l_m6 = new MyLabel("");
-		l_m7 = new MyLabel("");
-		l_m8 = new MyLabel("");
-		l_m9 = new MyLabel("");
-		l_m10 = new MyLabel("");
+		l_m6 = new JButton("");
+		l_m7 = new JButton("");
+		l_m8 = new JButton("");
+		l_m9 = new JButton("");
+		l_m10 = new JButton("");
 
-		l_m11 = new MyLabel("");
-		l_m12 = new MyLabel("");
-		l_m13 = new MyLabel("");
-		l_m14 = new MyLabel("");
-		l_m15 = new MyLabel("");
+		l_m11 = new JButton("");
+		l_m12 = new JButton("");
+		l_m13 = new JButton("");
+		l_m14 = new JButton("");
+		l_m15 = new JButton("");
 		JPanel loginBox = new JPanel();
 
 		loginBox.setLayout(new BoxLayout(loginBox, BoxLayout.Y_AXIS));
 		loginBox.add(l_quiensoy);
 		loginBox.add(l_puerto);
-		loginBox.add(l_titulo);
-
 		labels.add(l_m1);
 		labels.add(l_m2);
 		labels.add(l_m3);
@@ -86,10 +84,15 @@ public class Server extends MainWindow implements Runnable
 		labels.add(l_m13);
 		labels.add(l_m14);
 		labels.add(l_m15);
-
+		
+		for (JButton jb : this.labels) {
+			jb.setVisible(false);
+			jb.setBackground(this.colores.get(3));
+			jb.setForeground(this.colores.get(2));
+		}
 
 		clients = new ArrayList<Client>();
-        clients.add(oClient);
+		clients.add(oClient);
 
 		loginBox.add(l_m1);
 		loginBox.add(l_m2);
@@ -109,9 +112,9 @@ public class Server extends MainWindow implements Runnable
 		loginBox.add(l_m14);
 		loginBox.add(l_m15);
 
-		int x = 70,y = 70, b = 700,h = 300;
+		int x = 10,y = 10, b = 700,h = 300;
 		loginBox.setBounds(x, y, b, h+20);
-		loginBox.setBackground(colores.get(0));
+		loginBox.setBackground(colores.get(1));
 		panelCentro.add(loginBox);
 		
 		this.finGUI();
@@ -140,29 +143,29 @@ public class Server extends MainWindow implements Runnable
 				
 				JSONObject obj = new JSONObject(shiet);
 				if (obj.getBoolean("server")) {
-					l_quiensoy.setText("SERVIDOR");
+					l_quiensoy.setText("SERVER");
 				} else {
 					l_quiensoy.setText("HOST");
 				}
 				
 				JSONArray ary = obj.getJSONArray("clients");
-		        
-		        for (MyLabel ml : this.labels) {
-		        	ml.setText("");
-		        }
+				
+				for (JButton ml : this.labels) {
+					ml.setText("");
+				}
+				
 				this.clients = new ArrayList<Client>();
 				
 				for (int i = 0; i < ary.length(); i++) {
 					JSONObject jo = new JSONObject(ary.get(i).toString());
-					//String cpu, String ram, String os, String version, String ip) {
-
+					
 					this.clients.add(new Client(jo.getString("cpu"), jo.getString("ram"),
 							jo.getString("os"), jo.getString("version"), 
 							jo.getString("ip")));
 				}
 				//Rellenar datos
-		        this.setLabelsText(this.clients);
-
+				this.setLabelsText(this.clients);
+				
 				Thread.sleep(1000);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -174,94 +177,12 @@ public class Server extends MainWindow implements Runnable
 	public void setLabelsText(ArrayList<Client> clients) {
 		for (int i = 0; i < clients.size(); i++) {
 			labels.get(i).setText("");
-			labels.get(i).setText(clients.get(i).labelText() + " 10 Mbps");
-		}
-	}
-
-	public void orderClients() {
-		clients.sort(comparing(Client::getCpuDouble).thenComparing(Client::getRam));
-	}
-
-    public void sendIPs(String message){
-    	ArrayList<String> ipes = new ArrayList<String>();
-    	
-        for(int i=0; i < this.clients.size(); i++){
-        	boolean b = clients.get(i).ip != this.oClient.ip && !searchArrayList(ipes, clients.get(i).ip);
-        	boolean bb = !searchArrayList(ipes, clients.get(i).ip);
-        	System.out.println();
-        	System.out.println(b);
-        	System.out.println();
-        	System.out.println(bb);
-            if (clients.get(i).ip != this.oClient.ip && !searchArrayList(ipes, clients.get(i).ip) ) {
-            	System.out.println();
-            	System.out.println(clients.get(i).ip);
-            	System.out.println();
-            	System.out.println(ipes);
-            	System.out.println();
-            	System.out.println(i);
-            	System.out.println();
-            	ipes.add(clients.get(i).ip);
-                RequestServer(clients.get(i).ip, message);
-            }
-        }
-    }
-    
-    public boolean searchArrayList(ArrayList<String> array, String texto)
-    {
-    	boolean encontrado = false;
-    	for (String txt : array)
-    	{
-    		if (txt.equals(texto)) {
-    			encontrado = true;
-    			break;
-    		}
-    	}
-    	return encontrado;
-    }
-
-	public void RequestServer (String ip, String message)
-	{
-		// TODO Auto-generated method stub
-		ObjectOutputStream oos = null;
-		ObjectInputStream ois = null;
-		Socket s = null;
-
-		try
-		{
-			s = new Socket(ip, this.puerto);
-			oos = new ObjectOutputStream(s.getOutputStream());
-			ois = new ObjectInputStream(s.getInputStream());
-
-			oos.writeObject(message);
-			//this.btn_enviar.setEnabled(false);
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		finally
-		{
-			if( ois != null )
-				try {
-					ois.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			if( oos != null )
-				try {
-					oos.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			if( s != null )
-				try {
-					s.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			if (clients.get(i).labelText().length() > 0) {
+				labels.get(i).setVisible(true);
+			} else {
+				labels.get(i).setVisible(false);
+			}
+			labels.get(i).setText(clients.get(i).labelText());
 		}
 	}
 }

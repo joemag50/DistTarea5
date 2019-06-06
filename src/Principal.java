@@ -28,11 +28,6 @@ import org.json.JSONObject;
 
 public class Principal extends MainWindow
 {
-	ObjectInputStream ois = null;
-	ObjectOutputStream oos = null;
-	Socket s = null;
-	ServerSocket ss = null;
-
 	Principal () {
 		MyLabel l_titulo = new MyLabel("¿Mi computadora es?");
 		JPanel loginBox = new JPanel();
@@ -53,56 +48,8 @@ public class Principal extends MainWindow
 	}
 
 	public static void main(String[] args) {
-		//Server s = new Server();
 		Server.Serv();
 	}
 
-	public void switcher() {
-		while (true) {
-			try {
-				Client c = new Client();
-				String url = String.format("https://api-distribuidos.herokuapp.com/update/?ip=%s&cpu=%s&ram=%s", c.ip, c.cpu.replace("%",  ""), c.ram.replace(" ", ""));
-				System.out.println(url);
-				String shiet = Connection.Connect(url);
-				System.out.println(shiet);
-				
-				JSONObject obj = new JSONObject(shiet);
-				
-				if (obj.getBoolean("server")) {
-					this.dispose();
-					Server s = new Server();
-					s.Serv();
-				} else {
-					this.dispose();
-					Host h = new Host();
-					h.Hos();
-				}
-				Thread.sleep(3000);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	public void actionPerformed(ActionEvent arg0)
-	{
-		String boton = arg0.getActionCommand();
-		if (boton == "Host")
-		{
-			this.dispose();
-
-			Host h = new Host();
-			h.Hos();
-			return;
-		}
-
-		if (boton == "Server")
-		{
-			this.dispose();
-			
-			Server s = new Server();
-			s.Serv();
-			return;
-		}
-	}
+	public void actionPerformed(ActionEvent arg0) {}
 }

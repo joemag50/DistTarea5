@@ -8,12 +8,10 @@ public class Connection {
 	private final static String USER_AGENT = "Mozilla/5.0";
 	
 	public static String Connect(String url) throws Exception {
-		//String url = "https://moviserv-web.herokuapp.com/api/login?user[email]=greengamboa@gmail.com&user[password]=123456";
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("User-Agent", USER_AGENT);
-		int responseCode = con.getResponseCode();
 		BufferedReader in = new BufferedReader(
 		        new InputStreamReader(con.getInputStream()));
 		String inputLine;

@@ -51,7 +51,7 @@ public class Client {
 	}
 
 	public String labelText() {
-		return String.format("%s %s %s %s %s", cpu, ram, os, version, ip);
+		return String.format("%s - %s - %s - %s - %s - 3 Mbps", os, version, cpu, ram, ip);
 	}
 
 	public double getRam() {
@@ -84,10 +84,10 @@ public class Client {
 					value = method.invoke(operatingSystemMXBean);
 				} catch (Exception e) {
 					value = e;
-				} // try
+				}
 				ram = (long) value;
-			} // if
-		}// for
+			}
+		}
 		return ram;
 	}
 
@@ -103,10 +103,10 @@ public class Client {
 					value = method.invoke(operatingSystemMXBean);
 				} catch (Exception e) {
 					value = e;
-				} // try
+				}
 				ram = (long) value;
-			} // if
-		}// for
+			}
+		}
 		return ram;
 	}
 
@@ -127,61 +127,34 @@ public class Client {
 					value = method.invoke(operatingSystemMXBean);
 				} catch (Exception e) {
 					value = e;
-				} // try
+				}
 				cpu_load = (Double) value;
-			} // if
-		}// for
+			}
+		}
 		String result = String.format("%.3f", (cpu_load * 100)) + "%";
 		return result;
 	}
 
 	public String getIp() {
 		String ip = "";
-		
-        Enumeration<NetworkInterface> nets;
+		Enumeration<NetworkInterface> nets;
 		try {
 			nets = NetworkInterface.getNetworkInterfaces();
-	        for (NetworkInterface netint : Collections.list(nets))
-	        {
-	            Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
-	            for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-	            	String inetadd = inetAddress + "";
-	            	inetadd = inetadd.substring(1);
-		        	if (inetadd.startsWith("192")) {
-		        		ip = inetadd;
-		        	}
-	            }
-
-	        }
-	        
+			for (NetworkInterface netint : Collections.list(nets))
+			{
+				Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+				for (InetAddress inetAddress : Collections.list(inetAddresses)) {
+					String inetadd = inetAddress + "";
+					inetadd = inetadd.substring(1);
+					if (inetadd.startsWith("192")) {
+						ip = inetadd;
+					}
+				}
+			}
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		return ip;
-	}
-
-    static void displayInterfaceInformation(NetworkInterface netint) throws SocketException {
-        Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
-        for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-        }
-     }
-    
-	private static void printUsage() {
-		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-		for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
-			method.setAccessible(true);
-			if (method.getName().startsWith("get") && Modifier.isPublic(method.getModifiers())) {
-				Object value;
-				try {
-					value = method.invoke(operatingSystemMXBean);
-				} catch (Exception e) {
-					value = e;
-				} // try
-				//System.out.println(method.getName() + " = " + value);
-			} // if
-		} // for
 	}
 
 	public String humanReadableByteCount(long bytes, boolean si) {
